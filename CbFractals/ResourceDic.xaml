@@ -1,0 +1,58 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:CbFractals">
+    <Style x:Key="ValueSourceControlStyle" TargetType="Control">
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding VmValueNodeGuiEnum}" Value="ParameterRef">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate>
+                            <ListBox ItemsSource="{Binding VmParameters}" SelectedItem="{Binding VmParameter}" >
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding VmName}"/>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+
+            </DataTrigger>
+            <DataTrigger Binding="{Binding VmValueNodeGuiEnum}" Value="Constant">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate>
+                            <GroupBox Header="{Binding VmName}">
+                                <TextBox Text="{Binding VmValueText}"/>
+                            </GroupBox>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding VmValueNodeGuiEnum}" Value="ValueSources">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <GroupBox Header="{Binding VmName}">
+                                    <ListBox ItemsSource="{Binding VmValueSources}" SelectedItem="{Binding VmValueSource}" >
+                                        <ListBox.ItemTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding VmName}"/>
+                                            </DataTemplate>
+                                        </ListBox.ItemTemplate>
+                                    </ListBox>
+                                </GroupBox>
+                                <GroupBox Header="{Binding VmName}" DataContext="{Binding VmValueSource}">
+                                    <local:CValueSourceGui/>
+                                </GroupBox>
+                            </StackPanel>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+</ResourceDictionary>

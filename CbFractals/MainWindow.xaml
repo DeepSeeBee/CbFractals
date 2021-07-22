@@ -1,0 +1,216 @@
+﻿<Window x:Class="CbFractals.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:CbFractals"
+        mc:Ignorable="d"
+        Title="CbFractals" Height="900" Width="1400">
+    <Grid>
+        <DockPanel>
+            <StackPanel DockPanel.Dock="Bottom" Orientation="Vertical">
+                <DockPanel DataContext="{Binding VmProgressionManager}">
+                    <TextBlock Text="{Binding VmParameters[FramePos].VmName}"  />
+                    <TextBox MinWidth="50" DockPanel.Dock="Right" Text="{Binding VmParameters[FrameCount].VmConstant.VmValueText}" ToolTip="{Binding VmParameters[FramePos].VmName}"/>
+                    <Slider Margin="5,0,5,0"
+                            Minimum="0"
+                            Maximum="{Binding VmParameters[FrameCount].VmConstant.VmValue}"
+                            Value="{Binding VmParameters[FramePos].VmConstant.VmValue}"
+                            >
+                    </Slider>
+                </DockPanel>
+                
+                <StatusBar>
+                <StatusBarItem ToolTip="Position (MandelCoordinates)" >
+                    <TextBlock>
+                        <TextBlock Text="{Binding VmCenterSourceMnd.X}" />
+                        <TextBlock Text="|"/>
+                        <TextBlock Text="{Binding VmCenterSourceMnd.Y}" />
+                    </TextBlock>
+                </StatusBarItem>
+                <StatusBarItem ToolTip="Position (Pixel)" >
+                    <TextBlock>
+                        <TextBlock Text="{Binding VmCenterSourcePxlRounded.X}" />
+                        <TextBlock Text="|"/>
+                        <TextBlock Text="{Binding VmCenterSourcePxlRounded.Y}" />
+                    </TextBlock>
+                </StatusBarItem>
+                <StatusBarItem ToolTip="Frames to render till this zoom factor" >
+                    <TextBlock>
+                        <TextBlock Text="Frames: "/>
+                        <TextBlock Text="{Binding VmState.VmFrameCountProposal}" />
+                    </TextBlock>
+                </StatusBarItem>
+            </StatusBar>
+            </StackPanel>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="5"/>
+                    <RowDefinition Height="150"/>
+                </Grid.RowDefinitions>
+                <DockPanel Grid.Row="0">
+                    <ListBox DockPanel.Dock="Left" ItemsSource="{Binding VmStates}">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding .}"/>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                    <DockPanel >
+                        <ToolBar DockPanel.Dock="Top" >
+                            <StackPanel Orientation="Horizontal">
+                                <Border ToolTip="Rarest color"  Width="20" Background="{Binding VmState.RarestColorBrush}"  BorderBrush="Black" BorderThickness="1">
+                                    <TextBlock VerticalAlignment="Top" FontWeight="ExtraBlack" Text="R" TextAlignment="Center" Background="White" />
+                                </Border>
+                                <Border ToolTip="Dominant color"  Width="20" Background="{Binding VmState.DominantColorBrush}" BorderBrush="Black" BorderThickness="1">
+                                    <TextBlock VerticalAlignment="Top" FontWeight="ExtraBlack" Text="D" TextAlignment="Center" Background="White" />
+                                </Border>
+                                <GroupBox Header="Zoom">
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="Fast" />
+                                        <Slider x:Name="ZoomSlider"
+                                    IsEnabled="{Binding VmZoomSliderIsEnabled}"
+                        Minimum="0.001" 
+                        Maximum="0.977" 
+                        LargeChange="0.01"
+                        SmallChange="0.0002"                         
+                        Value="{Binding VmZoomSliderValue}"
+                        Width="200" 
+                        >
+                                        </Slider>
+                                        <TextBlock Text="Slow" />
+                                    </StackPanel>
+                                </GroupBox>
+                                <GroupBox Header="Reset">
+                                    <Button Content="Reset" IsEnabled="{Binding VmState.ResetButtonIsEnabled}" Width="50" Click="ResetButtonClick">
+                                    </Button>
+                                </GroupBox>
+                                <GroupBox Header="Render">
+                                    <StackPanel Orientation="Horizontal">
+                                        <Button Content="Start" Width="100" IsEnabled="{Binding VmState.RenderMovieStartButtonIsEnabled}" Click="OnBeginRenderMovieButtonClick">
+                                        </Button>
+                                        <StackPanel Margin="5,0,0,0" Orientation="Horizontal">
+                                            <Grid Visibility="{Binding VmState.RenderMovieGridVisibility}">
+                                                <TextBlock Text="Frames" Background="White" HorizontalAlignment="Center"/>
+                                                <!--<TextBox FontWeight="Bold" Text="{Binding VmState.VmFrameCount, Mode=OneWay}" IsReadOnly="True" MinWidth="50" IsEnabled="{Binding FrameCountTextBoxVisibility}" Opacity="0.9" />-->
+                                            </Grid>
+                                            <Grid Margin="5,0,0,0" Visibility="{Binding VmState.RenderMovieProgressGridVisibility}">
+                                                <ProgressBar Width="200" 
+                                                 IsIndeterminate="False"
+                                                 Minimum="0"
+                                                 Value="{Binding VmState.VmFrameNr, Mode=OneWay}"
+                                                 Maximum="{Binding VmState.VmFrameCount, Mode=OneWay}"
+                                                 >
+                                                </ProgressBar>
+                                                <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                                                    <TextBlock Text="Frame #"/>
+                                                    <TextBlock Text="{Binding VmState.VmFrameNr, Mode=OneWay}"/>
+                                                    <TextBlock Text="/"/>
+                                                    <TextBlock MinWidth="50" Text="{Binding VmState.VmFrameCount, Mode=OneWay}"/>
+                                                </StackPanel>
+                                            </Grid>
+                                            <Button Margin="5,0,0,0" Content="Cancel" Width="100" IsEnabled="{Binding VmState.RenderMovieCancelButtonIsEnabled}" Click="OnRenderBatchCancelButtonClick" >
+
+                                            </Button>
+                                        </StackPanel>
+                                    </StackPanel>
+
+
+                                </GroupBox>
+                                <GroupBox Header="OutputDirectory">
+                                    <TextBox IsReadOnly="True" MinWidth="100" MaxWidth="150" Text="{Binding VmState.VmDirectoryInfo.FullName, Mode=OneWay}" />
+                                </GroupBox>
+                            </StackPanel>
+                        </ToolBar>
+                        <Grid>
+                            <ScrollViewer HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible">
+                                <Canvas VerticalAlignment="Center" HorizontalAlignment="Center" Height="1080" Width="1920" x:Name="Canvas">
+                                    <Image x:Name="Image" MouseMove="OnImageMouseMove" MouseDown="OnImageMouseDown"
+                           Source="{Binding VmState.BitmapSource}"
+                           >
+
+                                    </Image>
+                                    <Ellipse x:Name="TargetEllipse" Canvas.Top="{Binding VmState.CenterTargetMarkerPos.Y}" Canvas.Left="{Binding VmState.CenterTargetMarkerPos.X}" Width="10" Height="10" Fill="Gray" StrokeThickness="1" Stroke="White"/>
+                                    <Ellipse x:Name="CenterEllipse" MouseMove="OnImageMouseMove" MouseDown="OnImageMouseDown" Canvas.Top="{Binding CenterSourceEllipsePos.Y}" Canvas.Left="{Binding CenterSourceEllipsePos.X}" Width="6" Height="5" Fill="Red" StrokeThickness="2" Stroke="White"/>
+                                </Canvas>
+                            </ScrollViewer>
+                            <ProgressBar Opacity="0.1" IsIndeterminate="True" Width="500" Height="50" Visibility="{Binding VmState.ProgressbarVisibility}">
+
+                            </ProgressBar>
+                        </Grid>
+                    </DockPanel>
+                </DockPanel>
+                <GridSplitter Grid.Row="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>
+                <Grid Grid.Row="2">
+                    <DockPanel DataContext="{Binding VmProgressionManager}">
+                        <StackPanel Orientation="Horizontal">
+                            <GroupBox Header="Parameters" DataContext="{Binding VmParameters}">
+                                <ListBox ItemsSource="{Binding VmParameters}" SelectedItem="{Binding VmParameter}">
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding VmName}"/>
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                </ListBox>
+                            </GroupBox>
+                            <GroupBox DataContext="{Binding VmParameters.VmParameter}">
+                                <GroupBox.Header>
+                                    <TextBlock>
+                                        <TextBlock Text="Parameter"/>
+                                        <TextBlock Text="{Binding VmName}"/>
+                                    </TextBlock>
+                                </GroupBox.Header>
+                                <StackPanel Orientation="Horizontal">
+                                    <GroupBox Header="ActiveProgression">
+                                        <ListBox ItemsSource="{Binding VmProgressions}" SelectedItem="{Binding VmProgression}">
+                                            <ListBox.ItemTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock Text="{Binding VmName}"/>
+                                                </DataTemplate>
+                                            </ListBox.ItemTemplate>
+                                        </ListBox>
+                                    </GroupBox>
+                                    
+                                        <local:CValueSourceGui DataContext="{Binding VmProgression}">
+                                            
+                                        </local:CValueSourceGui>
+                                        <!--<Control Style="{DynamicResource ValueSourceControlStyle}" DataContext="{Binding VmProgression}">
+                                                
+                                        </Control>-->
+                                   
+
+                                    <!--<GroupBox Header="ActiveProgression.ValueSources"
+                                              DataContext="{Binding VmProgression}">
+                                        <ListBox ItemsSource="{Binding VmValueSources}" 
+                                                 SelectedItem="{Binding VmValueSource}" >
+                                            <ListBox.ItemTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock Text="{Binding VmName}"/>
+                                                </DataTemplate>
+                                            </ListBox.ItemTemplate>
+                                        </ListBox>
+                                    </GroupBox>
+                                    <GroupBox Header="ValueSource"
+                                              DataContext="{Binding VmProgression.VmValueSource}">
+
+                                        <Control>
+                                            <Control.Style>
+                                                
+                                            </Control.Style>
+                                        </Control>
+                                        
+                                    </GroupBox>-->
+                                </StackPanel>
+                            </GroupBox>
+                        </StackPanel>
+                    </DockPanel>
+
+
+                </Grid>
+            </Grid>
+        </DockPanel>
+    
+
+    </Grid>
+</Window>
