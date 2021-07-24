@@ -7,13 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="MainWindow.xaml-202107181218.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="MainWindow.xaml-202107181218.cs">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </None>
+    <Folder Include="DefaultSettings\" />
   </ItemGroup>
 
 </Project>

@@ -10,12 +10,14 @@
         <DockPanel>
             <StackPanel DockPanel.Dock="Bottom" Orientation="Vertical">
                 <DockPanel DataContext="{Binding VmProgressionManager}">
-                    <TextBlock Text="{Binding VmParameters[FramePos].VmName}"  />
+                    <TextBlock Text="{Binding VmParameters[FrameIndex].VmName}"  />
                     <TextBox MinWidth="50" DockPanel.Dock="Right" Text="{Binding VmParameters[FrameCount].VmConstant.VmValueText}" ToolTip="{Binding VmParameters[FramePos].VmName}"/>
                     <Slider Margin="5,0,5,0"
                             Minimum="0"
                             Maximum="{Binding VmParameters[FrameCount].VmConstant.VmValue}"
-                            Value="{Binding VmParameters[FramePos].VmConstant.VmValue}"
+                            LargeChange="1"
+                            SmallChange="1"
+                            Value="{Binding VmParameters[FrameIndex].VmConstant.VmValue}"
                             >
                     </Slider>
                 </DockPanel>
@@ -145,14 +147,47 @@
                 <Grid Grid.Row="2">
                     <DockPanel DataContext="{Binding VmProgressionManager}">
                         <StackPanel Orientation="Horizontal">
-                            <GroupBox Header="Parameters" DataContext="{Binding VmParameters}">
-                                <ListBox ItemsSource="{Binding VmParameters}" SelectedItem="{Binding VmParameter}">
-                                    <ListBox.ItemTemplate>
+                            <GroupBox DataContext="{Binding VmParameters}">
+                                <GroupBox.Header>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Menu>
+                                            <MenuItem Header="▼">
+                                                <MenuItem Header="Save as default" Click="SaveProgression">
+                                                </MenuItem>
+                                            </MenuItem>
+                                        </Menu>
+                                        <TextBlock Text="Parameters"/>
+                                    </StackPanel>
+                                </GroupBox.Header>
+                                <ListView ItemsSource="{Binding VmParameters}" SelectedItem="{Binding VmParameter}">
+                                    <ListView.View>
+                                        <GridView>
+                                            <GridView.Columns>
+                                                <GridViewColumn Header="Name" DisplayMemberBinding="{Binding VmName}" />
+                                                <GridViewColumn Header="Min">
+                                                    <GridViewColumn.CellTemplate>
+                                                        <DataTemplate>
+                                                            <local:CValueSourceGui MinWidth="50" DataContext="{Binding VmMin}"/>
+                                                        </DataTemplate>
+                                                    </GridViewColumn.CellTemplate>
+                                                </GridViewColumn>
+                                                <GridViewColumn Header="Max">
+                                                    <GridViewColumn.CellTemplate>
+                                                        <DataTemplate>
+                                                            <local:CValueSourceGui MinWidth="50" DataContext="{Binding VmMax}"/>
+                                                        </DataTemplate>
+                                                    </GridViewColumn.CellTemplate>
+
+                                                </GridViewColumn>
+                                            </GridView.Columns>
+                                        </GridView>
+                                    </ListView.View>
+                                    <ListView.ItemTemplate>
                                         <DataTemplate>
                                             <TextBlock Text="{Binding VmName}"/>
                                         </DataTemplate>
-                                    </ListBox.ItemTemplate>
-                                </ListBox>
+                                    </ListView.ItemTemplate>
+                                </ListView>
                             </GroupBox>
                             <GroupBox DataContext="{Binding VmParameters.VmParameter}">
                                 <GroupBox.Header>
@@ -163,7 +198,7 @@
                                 </GroupBox.Header>
                                 <StackPanel Orientation="Horizontal">
                                     <GroupBox Header="ActiveProgression">
-                                        <ListBox ItemsSource="{Binding VmProgressions}" SelectedItem="{Binding VmProgression}">
+                                        <ListBox IsEnabled="{Binding VmValueSourceEditable}" ItemsSource="{Binding VmProgressions}" SelectedItem="{Binding VmProgression}">
                                             <ListBox.ItemTemplate>
                                                 <DataTemplate>
                                                     <TextBlock Text="{Binding VmName}"/>
@@ -171,11 +206,11 @@
                                             </ListBox.ItemTemplate>
                                         </ListBox>
                                     </GroupBox>
-                                    
-                                        <local:CValueSourceGui DataContext="{Binding VmProgression}">
-                                            
+                                    <GroupBox Header="{Binding VmName}" DataContext="{Binding VmProgression}">
+                                        <local:CValueSourceGui >
                                         </local:CValueSourceGui>
-                                        <!--<Control Style="{DynamicResource ValueSourceControlStyle}" DataContext="{Binding VmProgression}">
+                                    </GroupBox>
+                                    <!--<Control Style="{DynamicResource ValueSourceControlStyle}" DataContext="{Binding VmProgression}">
                                                 
                                         </Control>-->
                                    

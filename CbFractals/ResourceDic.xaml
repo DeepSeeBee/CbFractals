@@ -20,13 +20,11 @@
                 </Setter>
 
             </DataTrigger>
-            <DataTrigger Binding="{Binding VmValueNodeGuiEnum}" Value="Constant">
+            <DataTrigger Binding="{Binding VmValueNodeGuiEnum}" Value="TextBox">
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate>
-                            <GroupBox Header="{Binding VmName}">
-                                <TextBox Text="{Binding VmValueText}"/>
-                            </GroupBox>
+                            <TextBox Text="{Binding VmValueText}" IsEnabled="{Binding VmDataEditable}"/>
                         </ControlTemplate>
                     </Setter.Value>
                 </Setter>
@@ -37,7 +35,7 @@
                         <ControlTemplate>
                             <StackPanel Orientation="Horizontal">
                                 <GroupBox Header="{Binding VmName}">
-                                    <ListBox ItemsSource="{Binding VmValueSources}" SelectedItem="{Binding VmValueSource}" >
+                                    <ListBox IsEnabled="{Binding VmValueSourceEditable}" ItemsSource="{Binding VmValueSources}" SelectedItem="{Binding VmValueSource}" >
                                         <ListBox.ItemTemplate>
                                             <DataTemplate>
                                                 <TextBlock Text="{Binding VmName}"/>
@@ -49,6 +47,16 @@
                                     <local:CValueSourceGui/>
                                 </GroupBox>
                             </StackPanel>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding VmValueNodeGuiEnum}" Value="Enum">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate>
+                            <ComboBox ItemsSource="{Binding VmValues}" SelectedItem="{Binding VmValue}">
+                            </ComboBox>
                         </ControlTemplate>
                     </Setter.Value>
                 </Setter>
