@@ -11,14 +11,14 @@
         <DockPanel>
             <StackPanel DockPanel.Dock="Bottom" Orientation="Vertical">
                 <DockPanel DataContext="{Binding VmProgressionManager}">
-                    <TextBlock Text="{Binding VmParameters[FrameIndex].VmName}"  />
-                    <TextBox MinWidth="50" DockPanel.Dock="Right" Text="{Binding VmParameters[FrameCount].VmConstant.VmValueText}" ToolTip="{Binding VmParameters[FramePos].VmName}"/>
+                    <TextBlock Text="{Binding VmParameters[SecondIndex].VmName}"  />
+                    <TextBox MinWidth="50" DockPanel.Dock="Right" Text="{Binding VmParameters[SecondCount].VmConstant.VmValueText}" ToolTip="{Binding VmParameters[FramePos].VmName}"/>
                     <Slider Margin="5,0,5,0"
                             Minimum="0"
-                            Maximum="{Binding VmParameters[FrameCount].VmConstant.VmValue}"
+                            Maximum="{Binding VmParameters[SecondCount].VmConstant.VmValue}"
                             LargeChange="1"
-                            SmallChange="1"
-                            Value="{Binding VmParameters[FrameIndex].VmConstant.VmValue}"
+                            SmallChange="0.1"
+                            Value="{Binding VmParameters[SecondIndex].VmConstant.VmValue}"
                             >
                     </Slider>
                 </DockPanel>
@@ -155,12 +155,13 @@
                                             <MenuItem Header="▼">
                                                 <MenuItem Header="Save as default" Click="SaveProgression">
                                                 </MenuItem>
+                                                <MenuItem Header="Show all" IsCheckable="True" IsChecked="{Binding VmShowAll, Mode=TwoWay}"/>
                                             </MenuItem>
                                         </Menu>
                                         <TextBlock Text="Parameters"/>
                                     </StackPanel>
                                 </GroupBox.Header>
-                                <ListView ItemsSource="{Binding VmParameters}" SelectedItem="{Binding VmParameter}">
+                                <ListView ItemsSource="{Binding VmValueSources}" SelectedItem="{Binding VmValueSource}">
                                     <ListView.View>
                                         <GridView>
                                             <GridView.Columns>
@@ -178,7 +179,13 @@
                                                             <psysgui:CValueSourceGui MinWidth="50" DataContext="{Binding VmMax}"/>
                                                         </DataTemplate>
                                                     </GridViewColumn.CellTemplate>
-
+                                                </GridViewColumn>
+                                                <GridViewColumn Header="Actual">
+                                                    <GridViewColumn.CellTemplate>
+                                                        <DataTemplate>
+                                                            <psysgui:CValueSourceGui MinWidth="50" DataContext="{Binding VmCurrentValue}"/>
+                                                        </DataTemplate>
+                                                    </GridViewColumn.CellTemplate>
                                                 </GridViewColumn>
                                             </GridView.Columns>
                                         </GridView>
@@ -190,7 +197,7 @@
                                     </ListView.ItemTemplate>
                                 </ListView>
                             </GroupBox>
-                            <GroupBox DataContext="{Binding VmParameters.VmParameter}">
+                            <GroupBox DataContext="{Binding VmParameters.VmValueSource}">
                                 <GroupBox.Header>
                                     <TextBlock>
                                         <TextBlock Text="Parameter"/>

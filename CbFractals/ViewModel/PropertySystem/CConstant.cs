@@ -22,6 +22,9 @@ namespace CbFractals.ViewModel.PropertySystem
         internal override bool IsData => true;
         internal virtual void SetDefaultMin() { }
         internal virtual void SetDefaultMax() { }
+
+        internal abstract void SetTypelessValue(object v);
+
     }
 
     public abstract class CConstant<T> : CConstant
@@ -59,6 +62,7 @@ namespace CbFractals.ViewModel.PropertySystem
         }
         public T VmValue { get => this.Value; set => this.Value = value; }
         internal override object GetTypelessValue() => this.Value;
+        internal override void SetTypelessValue(object v) => this.Value = (T)v;
         internal abstract T Parse(string s);
         internal virtual string ToString(T aValue) => aValue.ToString();
         #endregion

@@ -10,10 +10,13 @@ namespace CbFractals.ViewModel.PropertySystem
     public enum CValueNodeGuiEnum
     {
         Null,
-        ParameterRef,
+        ParameterRef,        
         TextBox,
         ValueSources,
         Enum,
+        ParameterCurrentValue,
+        Func,
+        InputParameter,
     }
 
     public abstract class CValueNode : CViewModel
@@ -36,6 +39,7 @@ namespace CbFractals.ViewModel.PropertySystem
         #region Value
         //internal abstract void SetTypelessValue(object v);
         internal abstract object GetTypelessValue();
+       // internal abstract void SetTypelessValue(object v);
         internal double GetDoubleValue() => Convert.ToDouble(this.GetTypelessValue());
         //internal object TypelessValue { get => this.GetTypelessValue(); set => this.SetTypelessValue(this.ConvertToTypedValue(value)); }
         //internal abstract object ConvertToTypedValue(object o);
@@ -48,12 +52,17 @@ namespace CbFractals.ViewModel.PropertySystem
         #region Buid
         internal virtual void Build()
         {
+            foreach (var aSubValueNode in this.SubValueNodes)
+            {
+                aSubValueNode.Build();
+            }
+            this.ValueSource = this.ValueSourceDefault;
         }
         #endregion
         #region ValueSources
         internal virtual IEnumerable<CValueNode> StoredNodes => this.SubValueNodes.Where(n => n.Supported && n.DataEditable);
         internal virtual IEnumerable<CValueNode> ValueSources => Array.Empty<CValueNode>();
-        public IEnumerable<CValueNode> VmValueSources => this.ValueSources;
+        public virtual IEnumerable<CValueNode> VmValueSources => this.ValueSources.OrderBy(s=>s.VmName);
         #endregion
         #region ValueNode
         private CValueNode ValueSourceM;
@@ -63,9 +72,15 @@ namespace CbFractals.ViewModel.PropertySystem
             set
             {
                 this.ValueSourceM = value;
+                if(this.ValueSourceSetRecalculates)
+                {
+                    this.ParentProgressionManager.OnChangeValue(this);
+                }
                 this.OnPropertyChanged(nameof(this.VmValueSource));
             }
         }
+        internal virtual bool ValueSourceSetRecalculates => true;
+        internal virtual CValueNode ValueSourceDefault => this.ValueSources.FirstOrDefault();
         public CValueNode VmValueSource
         {
             get => this.ValueSource;
@@ -92,7 +107,7 @@ namespace CbFractals.ViewModel.PropertySystem
             foreach (var aSubValueNode in this.SubValueNodes)
                 aSubValueNode.SetEditable(v);
         }
-        private bool ValueSourceEditable = true;
+        internal bool ValueSourceEditable = true;
         public bool VmValueSourceEditable => this.ValueSourceEditable;
         internal void SetValueSourceEditable(bool b)
         {
@@ -114,44 +129,43 @@ namespace CbFractals.ViewModel.PropertySystem
         }
         internal bool Selectable = true;
         public bool VmSelectable => this.Selectable;
-
+        public override string ToString() => this.Name.ToString();
+        internal void SetValueSource(CParameterEnum p)
+            => this.ValueSource = this.ParentProgressionManager.Parameters[p];
     }
-
-
 
     internal sealed class CParameterRef : CValueNode
     {
         #region ctor
-        internal CParameterRef(CProgression aProgression, CNameEnum aName) : base(aProgression.ParentProgressionManager, aName)
+        internal CParameterRef(CValueNode aParentValueNode, CNameEnum aName) : base(aParentValueNode.ParentProgressionManager, aName)
         {
-            this.ParentProgression = aProgression;
         }
-        #endregion
-        #region Progression
-        internal readonly CProgression ParentProgression;
         #endregion
         #region Parameters
         internal IEnumerable<CParameter> Parameters => this.ParentProgressionManager.Parameters.Parameters;
-        public IEnumerable<CParameter> VmParameters => this.Parameters;
+        public IEnumerable<CParameter> VmParameters => this.Parameters.OrderBy(p=>p.VmName);
         #endregion
         #region Parameter
-        private CParameter ParameterM;
         internal CParameter Parameter
         {
-            get => CLazyLoad.Get(ref this.ParameterM, () => this.ParentProgressionManager.Parameters[CParameterEnum.DoubleZero]);
-            set
-            {
-                this.ParameterM = value;
-                this.OnPropertyChanged(nameof(this.VmParameter));
-            }
+            get => (CParameter)this.ValueSource; // CLazyLoad.Get(ref this.ParameterM, () => this.ParentProgressionManager.Parameters[CParameterEnum.DoubleZero]);
+            set => this.ValueSource = value;
         }
-        public CParameter VmParameter
-        {
-            get => this.Parameter;
-            set => this.Parameter = value;
-        }
+        internal override CValueNode ValueSourceDefault => this.ParentProgressionManager.Parameters[CParameterEnum.DoubleZero];
+        public CParameter VmParameter => throw new NotImplementedException();
+        internal override IEnumerable<CValueNode> ValueSources => this.Parameters;
+        //{
+        //    get =>  this.Parameter;
+        //    set => this.Parameter = value;
+        //}
         #endregion
         internal override CValueNodeGuiEnum ValueNodeGuiEnum => CValueNodeGuiEnum.ParameterRef;
         internal override object GetTypelessValue() => this.Parameter.GetTypelessValue();
+        internal override void Build()
+        {
+            base.Build();
+        }
+
+
     }
 }

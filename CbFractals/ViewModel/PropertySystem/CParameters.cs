@@ -55,19 +55,19 @@ namespace CbFractals.ViewModel.PropertySystem
         Parameter_FrameCount,
 
         [CGuid("6e2b59d2-8e62-42a7-808f-ecab1639de80")]
-        Parameter_FramePos,
+        Parameter_FrameIndex,
 
         [CGuid("1381b37a-bd4a-40ab-865c-fcdda4a1416c")]
-        Parameter_JuliaRealPart,
+        Parameter_JuliaPartReal,
 
         [CGuid("dc82d396-9bff-430c-9ef2-469b0f77ee7d")]
-        Parameter_JuliaImaginaryPart,
+        Parameter_JuliaPartImaginary,
 
-        [CGuid("84894455-06c7-40b6-812c-b63eb537d2e6")]
-        Parameter_JuliaMoveX,
+        //[CGuid("84894455-06c7-40b6-812c-b63eb537d2e6")]
+        //Parameter_JuliaMoveX,
 
-        [CGuid("ef4e5902-e225-44f1-bc65-a7d42139c275")]
-        Parameter_JuliaMoveY,
+        //[CGuid("ef4e5902-e225-44f1-bc65-a7d42139c275")]
+        //Parameter_JuliaMoveY,
 
         [CGuid("13d6f48d-89d7-41ca-898c-0f7c68eb52b8")]
         Parameter_Zoom,
@@ -89,6 +89,51 @@ namespace CbFractals.ViewModel.PropertySystem
 
         [CGuid("5797cdbe-ff8d-4bbb-8f2a-7f470682a6b7")]
         Parameter_PixelAlgorithm1,
+
+        [CGuid("1fa7d763-1f5b-4c6e-9df9-e7f9b3ed1ec9")]
+        Parameter_BeatIndex,
+
+        [CGuid("89ebec47-6a1f-4a24-b3c1-520feb1c9e5e")]
+        Parameter_BeatIndex_Max,
+
+        [CGuid("1517129f-4ec4-49b7-ae6e-2ec16bafdf13")]
+        Parameter_BeatCount,
+
+        [CGuid("25767fd8-ac17-4110-a30b-de8ac73134a1")]
+        Parameter_SecondIndex,
+
+        [CGuid("14e8d7dd-1123-4fd0-8861-02f8cea74db5")]
+        Parameter_SecondCount,
+
+        [CGuid("fe6f4de2-761a-4a4d-86ff-2cceac8f81ec")]
+        CurrentValue,
+
+        [CGuid("0305e5a1-dcb9-4acc-ad82-202d72efc8b6")]
+        ParameterRef,
+
+        [CGuid("cd672e18-57f2-4766-bcb3-17bc8af6df18")]
+        Parameter_BeatsPerMinute,
+
+        [CGuid("6f4461d9-a7fc-4259-84db-ea370b0f255b")]
+        Parameter_FramesPerSecond,
+
+        [CGuid("6b3f5fa1-7014-48f5-af7c-bd03690cd793")]
+        InputParameters,
+
+        [CGuid("3a9760cd-a341-4e07-aaa4-47efb0aa9f4b")]
+        FuncProgression,
+
+        [CGuid("c9b036b8-afc3-4bf2-9b56-ab9ae8106425")]
+        Func_SecondsToBeatCount,
+
+        [CGuid("7c16033f-8b48-4631-9f44-67cf1db08bf2")]
+        Func_SecondsToBeatCount_In_Seconds,
+
+        [CGuid("1405ed4d-f4d3-44d3-b4aa-fcf285503fb5")]
+        Func_SecondsToFrameCount,
+
+        [CGuid("f0e2139e-6483-40a0-926c-0e749b571207")]
+        Func_SecondsToFrameCount_In_Seconds,
 
     }
 
@@ -116,35 +161,35 @@ namespace CbFractals.ViewModel.PropertySystem
         DoubleZero,
 
         [CName(CNameEnum.Parameter_FrameCount)]
-        [CDataType(typeof(Int64))]
+        [CDataType(typeof(double))]
         FrameCount,
 
-        [CName(CNameEnum.Parameter_FramePos)]
-        [CDataType(typeof(Int64))]
+        [CName(CNameEnum.Parameter_FrameIndex)]
+        [CDataType(typeof(double))]
         FrameIndex,
 
-        [CName(CNameEnum.Parameter_JuliaRealPart)]
+        [CName(CNameEnum.Parameter_JuliaPartReal)]
         [CDataType(typeof(double))]
-        JuliaRealPart,
+        JuliaPartReal,
 
-        [CName(CNameEnum.Parameter_JuliaImaginaryPart)]
+        [CName(CNameEnum.Parameter_JuliaPartImaginary)]
         [CDataType(typeof(double))]
-        JuliaImaginaryPart,
+        JuliaPartImaginary,
 
-        [CName(CNameEnum.Parameter_JuliaMoveX)]
-        [CDataType(typeof(double))]
-        JuliaMoveX,
+        //[CName(CNameEnum.Parameter_JuliaMoveX)]
+        //[CDataType(typeof(double))]
+        //JuliaMoveX, // TODO_OBSOLETE
 
-        [CName(CNameEnum.Parameter_JuliaMoveY)]
-        [CDataType(typeof(double))]
-        JuliaMoveY,
+        //[CName(CNameEnum.Parameter_JuliaMoveY)]
+        //[CDataType(typeof(double))]
+        //JuliaMoveY, // TODO_OBSOLETE
 
         [CName(CNameEnum.Parameter_Zoom)]
         [CDataType(typeof(double))]
         Zoom,
 
         [CName(CNameEnum.Parameter_Iterations)]
-        [CDataType(typeof(Int64))]
+        [CDataType(typeof(double))]
         Iterations,
 
         [CName(CNameEnum.Parameter_DarkenThresholdLo)]
@@ -167,6 +212,34 @@ namespace CbFractals.ViewModel.PropertySystem
         [CName(CNameEnum.Parameter_PixelAlgorithm1)]
         [CDataType(typeof(CPixelAlgorithmEnum))]
         PixelAlgorithm1,
+
+        [CName(CNameEnum.Parameter_BeatIndex)]
+        [CDataType(typeof(double))]
+        BeatIndex,
+
+        [CName(CNameEnum.Parameter_BeatIndex_Max)]
+        [CDataType(typeof(double))]
+        BeatIndex_Max,
+
+        [CName(CNameEnum.Parameter_BeatsPerMinute)]
+        [CDataType(typeof(double))]
+        BeatsPerMinute,
+
+        [CName(CNameEnum.Parameter_BeatCount)]
+        [CDataType(typeof(double))]
+        BeatCount,
+
+        [CName(CNameEnum.Parameter_SecondIndex)]
+        [CDataType(typeof(double))]
+        SecondIndex,
+
+        [CName(CNameEnum.Parameter_SecondCount)]
+        [CDataType(typeof(double))]
+        SecondCount,
+
+        [CName(CNameEnum.Parameter_FramesPerSecond)]
+        [CDataType(typeof(double))]
+        FramesPerSecond,
 
         _Count
     }
@@ -199,37 +272,74 @@ namespace CbFractals.ViewModel.PropertySystem
                 aParameter.Build();
             }
 
-            var aFrameCount = 900;
+            //var aFrameCount = 900;
+            var aSecondCount = 10d;
+            this[CParameterEnum.SecondCount].SetConst(aSecondCount, 0, double.MaxValue);
+            this[CParameterEnum.SecondCount].As<CDoubleParameter>().MapToRange = false;
+            this[CParameterEnum.SecondIndex].As<CDoubleParameter>().MapToRange = false;
+            this[CParameterEnum.SecondIndex].SetConst(aSecondCount / 2, 0, double.MaxValue);
+            this[CParameterEnum.SecondIndex].Min.SetEditable(false);
+            this[CParameterEnum.SecondIndex].Max.SetEditable(false);
+
             this[CParameterEnum.DoubleZero].SetConst<double>(0);
             this[CParameterEnum.DoubleZero].SetEditable(false);
-            this[CParameterEnum.FrameCount].SetConst<Int64>(aFrameCount, 1, Int64.MaxValue);
+            //this[CParameterEnum.FrameCount].SetConst<Int64>(aFrameCount, 1, Int64.MaxValue);
+            this[CParameterEnum.FrameCount].As<CDoubleParameter>().MapToRange = false;
+            this[CParameterEnum.FrameCount].As<CDoubleParameter>().SetFuncProgression(CNameEnum.Func_SecondsToFrameCount, true, CParameterEnum.SecondCount);
             this[CParameterEnum.FrameCount].Min.SetEditable(false);
             this[CParameterEnum.FrameCount].Max.SetEditable(false);
             this[CParameterEnum.FrameCount].SetValueSourceEditable(false);
-            this[CParameterEnum.FrameIndex].SetConst<Int64>(aFrameCount / 2, 0, Int64.MaxValue);
+            //this[CParameterEnum.FrameIndex].SetConst<Int64>(aFrameCount / 2, 0, Int64.MaxValue);
+            this[CParameterEnum.FrameIndex].As<CDoubleParameter>().MapToRange = false;
+            this.SetFrameIndexBySecondIndex();
             this[CParameterEnum.FrameIndex].Min.SetEditable(false);
             this[CParameterEnum.FrameIndex].Max.SetEditable(false);
-            this[CParameterEnum.JuliaRealPart].As<CParameter<double>>().Min.Value = -4.3d;
-            this[CParameterEnum.JuliaRealPart].As<CParameter<double>>().Max.Value = 3;
-            this[CParameterEnum.JuliaRealPart].SetConst<double>(0.446d); // -0.68
-            this[CParameterEnum.JuliaRealPart].SetMappedProgression(0.43d, 0.47d);
-            this[CParameterEnum.JuliaImaginaryPart].As<CParameter<double>>().Min.Value = 0.3d;
-            this[CParameterEnum.JuliaImaginaryPart].As<CParameter<double>>().Max.Value = 0.1d;
-            this[CParameterEnum.JuliaImaginaryPart].SetConst<double>(0.24d);
-            this[CParameterEnum.JuliaImaginaryPart].SetMappedProgression(0.23d, 0.26d);
-            this[CParameterEnum.Zoom].SetConst<double>(0d, 1, 1000);
-            this[CParameterEnum.Zoom].SetProgression(1d, 1000d);
-            this[CParameterEnum.Iterations].SetConst<Int64>(300, 1, Int64.MaxValue);
-            this[CParameterEnum.Iterations].SetMappedProgression(300, 10);
-            this[CParameterEnum.DarkenThresholdLo].SetConst<double>(0.3);
+            this[CParameterEnum.FrameIndex].SetEditable(false);
+            this[CParameterEnum.JuliaPartReal].As<CParameter<double>>().Min.Value = -4.3d;
+            this[CParameterEnum.JuliaPartReal].As<CParameter<double>>().MaxConstant.Value = 3;
+            this[CParameterEnum.JuliaPartReal].SetConst<double>(0.446d); // -0.68
+            this[CParameterEnum.JuliaPartReal].SetMappedProgression(0.43d, 0.47d);
+            this[CParameterEnum.JuliaPartImaginary].As<CParameter<double>>().Min.Value = 0.3d;
+            this[CParameterEnum.JuliaPartImaginary].As<CParameter<double>>().MaxConstant.Value = 0.1d;
+            this[CParameterEnum.JuliaPartImaginary].SetConst<double>(0.24d);
+            this[CParameterEnum.JuliaPartImaginary].SetMappedProgression(0.23d, 0.26d);
+            this[CParameterEnum.Zoom].SetConst<double>(1d, 1, 2.5d);
+            //this[CParameterEnum.Zoom].SetMappedProgression(0, 1);
+            this[CParameterEnum.Iterations].SetConst<double>(0.3d, 10, 1000);
+            this[CParameterEnum.Iterations].SetMappedProgression(0, 1);
+            this[CParameterEnum.DarkenThresholdLo].SetConst<double>(0, 0.2, 0.1);
+            //this[CParameterEnum.DarkenThresholdLo].SetMappedProgression(0.3, 0);
             this[CParameterEnum.DarkenThresholdHi].SetConst<double>(0.2);
-            this[CParameterEnum.ColorPeriod].SetConst<double>(1d);
-            this[CParameterEnum.ColorOffset].SetConst<double>(1.5d);
+            this[CParameterEnum.DarkenThresholdHi].SetMappedProgression(0.2, 0);
+            this[CParameterEnum.ColorPeriod].SetConst<double>(0d, 1d, 3d);
+            this[CParameterEnum.ColorOffset].SetConst<double>(0d, 1.5d, 1.6d);
             this[CParameterEnum.PixelAlgorithm1].SetConst(CPixelAlgorithmEnum.MandelbrotJuliaSingle);
             this[CParameterEnum.PixelAlgorithm1].MappedProgression.SetSelectable(false);
             this[CParameterEnum.CenterX].SetConst<double>(0.5d);
             this[CParameterEnum.CenterY].SetConst<double>(0.5d);
+            this[CParameterEnum.BeatCount].SetConst<double>(1, 1, double.MaxValue);
+            this[CParameterEnum.BeatCount].As<CDoubleParameter>().MapToRange = false;
+            this[CParameterEnum.BeatCount].As<CDoubleParameter>().SetFuncProgression(CNameEnum.Func_SecondsToBeatCount, true, CParameterEnum.SecondCount);
+            this[CParameterEnum.BeatCount].SetEditable(false);
 
+            this[CParameterEnum.BeatIndex_Max].SetConst(0, 0, double.MaxValue);
+            this[CParameterEnum.BeatIndex_Max].As<CDoubleParameter>().MapToRange = false;
+            this[CParameterEnum.BeatIndex_Max].SetParameterRef(CParameterEnum.BeatCount, true); // .SetConst<double>(0, 0, 127);
+            this[CParameterEnum.BeatIndex_Max].SetEditable(false);
+            //this[CParameterEnum.BeatIndex].SetConst<double>(0, 0, 127);
+            this[CParameterEnum.BeatIndex].As<CDoubleParameter>().MapToRange = false;
+            this[CParameterEnum.BeatIndex].SetMax(CParameterEnum.BeatIndex_Max);
+            this[CParameterEnum.BeatIndex].As<CDoubleParameter>().SetFuncProgression(CNameEnum.Func_SecondsToBeatCount, true, CParameterEnum.SecondIndex);
+            this[CParameterEnum.BeatIndex].SetEditable(false);
+            this[CParameterEnum.BeatsPerMinute].SetConst<double>(128, 1, double.MaxValue);
+            this[CParameterEnum.BeatsPerMinute].SetEditable(false);
+            this[CParameterEnum.BeatsPerMinute].Constant.SetEditable(true);
+            this[CParameterEnum.BeatsPerMinute].As<CDoubleParameter>().MapToRange = false;
+            this[CParameterEnum.FramesPerSecond].SetConst(30, 1, double.MaxValue);
+            this[CParameterEnum.FramesPerSecond].SetEditable(false);
+            this[CParameterEnum.FramesPerSecond].As<CDoubleParameter>().MapToRange = false;
+
+            
 
             //var aJuliaConstReal = this[CParameterEnum.JuliaConstRealPart];
             //aJuliaConstReal.SetConst<double>(-0.7d);
@@ -258,11 +368,26 @@ namespace CbFractals.ViewModel.PropertySystem
             //this[CParameterEnum.CenterY].SetConst<double>(0.5d);
         }
         #endregion
+        #region Render
+        /// <summary>
+        /// Legt fest, dass der FrameIndex anhand der Sekunden berechnet wird.
+        /// Diese Einstellung wird während dem Editieren verwendet.
+        /// </summary>
+        internal void SetFrameIndexBySecondIndex()
+            => this[CParameterEnum.FrameIndex].As<CDoubleParameter>().SetFuncProgression(CNameEnum.Func_SecondsToFrameCount, true, CParameterEnum.SecondIndex);
+
+        /// <summary>
+        /// Legt fest, dass der FrameIndex anhand der Konstante verwendet wird.
+        /// Diese Einstellung wird während dem Rendern verwendet.
+        /// </summary>
+        internal void SetFrameIndexByConst(double aFrameIndex)
+            => this[CParameterEnum.FrameIndex].SetConst<double>(aFrameIndex, true);
+
+
+        #endregion
+
         #region Parameters
         internal readonly CParameter[] Parameters;
-        private IEnumerable<CParameter> VmParametersM;
-        public IEnumerable<CParameter> VmParameters => CLazyLoad.Get(ref this.VmParametersM, () => this.Parameters.OrderBy(p => p.Name));
-
         public CParameter this[CParameterEnum aParameterEnum]
         {
             get => this.Parameters[(int)aParameterEnum];
@@ -270,22 +395,11 @@ namespace CbFractals.ViewModel.PropertySystem
         public T Get<T>(CParameterEnum aParameterEnum) where T : CParameter
             => (T)this[aParameterEnum];
         #endregion
-        #region Parameter
-        private CParameter ParameterM;
+        #region Parameter        
         internal CParameter Parameter
         {
-            get => this.ParameterM;
-            set
-            {
-                this.ParameterM = value;
-                this.ValueSource = value;
-                this.OnPropertyChanged(nameof(this.VmParameter));
-            }
-        }
-        public CParameter VmParameter
-        {
-            get => this.Parameter;
-            set => this.Parameter = value;
+            get => (CParameter) this.ValueSource;
+            set => this.ValueSource = value;
         }
         #endregion
         #region Value
@@ -294,6 +408,24 @@ namespace CbFractals.ViewModel.PropertySystem
         #region ParameterSnapshot
         internal CParameterSnapshot NewParameterSnapshot()
             => new CParameterSnapshot(this);
+        #endregion
+        #region ShowAll
+        private bool ShowAllM;
+        internal bool ShowAll 
+        { 
+            get => this.ShowAllM; 
+            set
+            {
+                this.ShowAllM = value;
+                this.OnPropertyChanged(nameof(this.VmShowAll));
+                this.OnPropertyChanged(nameof(this.VmValueSources));
+            }
+        }
+        public bool VmShowAll { get => this.ShowAll; set => this.ShowAll = value; }
+        #endregion
+        #region VmValueSources
+        internal override IEnumerable<CValueNode> ValueSources => this.Parameters;
+        public override IEnumerable<CValueNode> VmValueSources => this.ShowAll ? base.VmValueSources : base.VmValueSources.Where(vs => vs.ValueSourceEditable);
         #endregion
         internal override IEnumerable<CValueNode> StoredNodes => this.Parameters;
         private DirectoryInfo DirectoryInfo => new FileInfo(this.GetType().Assembly.Location).Directory;
@@ -304,6 +436,7 @@ namespace CbFractals.ViewModel.PropertySystem
             CXmlProgressionSnapshot.Save(this, this.DefaultFileInfo);
         }
         internal override IEnumerable<CValueNode> SubValueNodes => this.Parameters;
+        internal override bool ValueSourceSetRecalculates => false;
 
     }
 

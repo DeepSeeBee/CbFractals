@@ -8,7 +8,9 @@
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate>
-                            <ListBox ItemsSource="{Binding VmParameters}" SelectedItem="{Binding VmParameter}" >
+                            <ListBox ItemsSource="{Binding VmValueSources}" 
+                                     SelectedItem="{Binding VmValueSource}" 
+                                     IsEnabled="{Binding VmValueSourceEditable}">
                                 <ListBox.ItemTemplate>
                                     <DataTemplate>
                                         <TextBlock Text="{Binding VmName}"/>
@@ -36,7 +38,9 @@
                         <ControlTemplate>
                             <StackPanel Orientation="Horizontal">
                                 <GroupBox Header="{Binding VmName}">
-                                    <ListBox IsEnabled="{Binding VmValueSourceEditable}" ItemsSource="{Binding VmValueSources}" SelectedItem="{Binding VmValueSource}" >
+                                    <ListBox IsEnabled="{Binding VmValueSourceEditable}" 
+                                             ItemsSource="{Binding VmValueSources}" 
+                                             SelectedItem="{Binding VmValueSource, Mode=TwoWay}" >
                                         <ListBox.ItemTemplate>
                                             <DataTemplate>
                                                 <TextBlock Text="{Binding VmName}"/>
@@ -56,8 +60,38 @@
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate>
-                            <ComboBox ItemsSource="{Binding VmValues}" SelectedItem="{Binding VmValue}">
+                            <ComboBox ItemsSource="{Binding VmValues}"
+                                      SelectedItem="{Binding VmValue}"
+                                      IsEnabled="{Binding VmDataEditable}"
+                                      >
                             </ComboBox>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding VmValueNodeGuiEnum}" Value="ParameterCurrentValue">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate>
+                            <psysgui:CValueSourceGui DataContext="{Binding VmCurrentValue}"/>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding VmValueNodeGuiEnum}" Value="Func">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate>
+                            <psysgui:CValueSourceGui DataContext="{Binding VmInputParameters}"/>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding VmValueNodeGuiEnum}" Value="InputParameter">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate>
+                            <psysgui:CValueSourceGui DataContext="{Binding VmParameterRef}"/>
                         </ControlTemplate>
                     </Setter.Value>
                 </Setter>

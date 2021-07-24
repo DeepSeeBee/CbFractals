@@ -332,16 +332,6 @@ namespace CbFractals.ViewModel.Mandelbrot
             this.SizeMnd = aSizeMnd;
             this.StateEnum = CStateEnum.Reset;
         }
-        private enum CCommitRenderMovieCancelEnum
-        {
-            Default
-        }
-        private CMandelbrotState(CMandelbrotState aPreviousState, CCommitRenderMovieCancelEnum aCmd)
-        {
-            throw new NotImplementedException();
-
-            this.StateEnum = CStateEnum.EndCancelRenderMovie;
-        }
         #endregion        
         #region Converter
         private static CVec2 PixelToMandel(CVec2 v, CVec2 aSizePxl, CVec4 aSizeMnd)
@@ -598,80 +588,14 @@ namespace CbFractals.ViewModel.Mandelbrot
                     return c2;
                 });
 
-                var aMandelPixelFunc = new Func<CVec2Int, Color>(aPixelCoord =>
-                {
-                    var s = (1 << 16);
-                    var aMandelPos = aGetMandelPos(aPixelCoord);
-                    var x0 = aMandelPos.Item1;
-                    var y0 = aMandelPos.Item2;
-                    var x = 0.0d;
-                    var y = 0.0d;
-                    var it = 0;
-                    var itm = 100;
-                    while (x * x + y * y <= s && it < itm)
-                    {
-                        var xtmp = x * x - y * y + x0;
-                        y = 2 * x * y + y0;
-                        x = xtmp;
-                        ++it;
-                    }
-                    var m = true;
-                    if (it < itm
-                    && m)
-                    {
-                        var aLogZn = Math.Log(x * x + y * y) / 2;
-                        var nu = (int)(Math.Log(aLogZn / Math.Log(2)) / Math.Log(2));
-                        it = it + 1 - nu;
-                    }
-
-                    var itf = (float)it / (float)itm;
-                    var c = aGetColor(itf);
-                    return c;
-                });
-                var aJuliaPixelFunc = new Func<CVec2Int, Color>(aPixelCoord =>
-                {
-                    var itm = aParametersSnapshot.Get<Int64>(CParameterEnum.Iterations); // 300; //after how much iterations the function should stop
-
-                    //pick some values for the constant c, this determines the shape of the Julia Set
-                    var cRe = aParametersSnapshot.Get<double>(CParameterEnum.JuliaRealPart);// -0.7d;    // real part of the constant c, determinate shape of the Julia Set
-                    var cIm = aParametersSnapshot.Get<double>(CParameterEnum.JuliaImaginaryPart); //0.27015d; // imaginary part of the constant c, determinate shape of the Julia Set
-                                                                                                  //cIm = 0.3d;
-                                                                                                  //cRe = -0.68;
-                    var h = aDy;
-                    var w = aDx;
-                    var x = aPixelCoord.Item1;
-                    var y = aPixelCoord.Item2;
-                    var zoom = aParametersSnapshot.Get<double>(CParameterEnum.Zoom); // SizeMndDefault.Item3 / aSizeMnd.Item3;
-                    var moveX = aParametersSnapshot.Get<double>(CParameterEnum.JuliaMoveX);
-                    var moveY = aParametersSnapshot.Get<double>(CParameterEnum.JuliaMoveY);
-                    var newRe = 1.5 * (x - w / 2) / (0.5 * zoom * w) + moveX;
-                    var newIm = (y - h / 2) / (0.5 * zoom * h) + moveY;
-                    var it = 0;
-                    for (it = 0; it < itm; it++)
-                    {
-                        var oldRe = newRe;
-                        var oldIm = newIm;
-                        //the actual iteration, the real and imaginary part are calculated
-                        newRe = oldRe * oldRe - oldIm * oldIm + cRe;
-                        newIm = 2 * oldRe * oldIm + cIm;
-                        //if the point is outside the circle with radius 2: stop
-                        if ((newRe * newRe + newIm * newIm) > 4) break;
-                    }
-                    var itf = (float)it / (float)itm;
-                    var c = aGetColor(itf);
-                    return c;
-                });
-
                 var aPixelAlgoEnum = aParametersSnapshot.Get<CPixelAlgorithmEnum>(CParameterEnum.PixelAlgorithm1);
                 var aPixelAlgorithmInput = new CPixelAlgorithmInput(aSizePxl, aSizeMnd, aParametersSnapshot, aGetColor);
                 var aPixelAlgorithm = CDataTypeAttribute.GetByEnum(aPixelAlgoEnum).DataType.New<CPixelAlgorithm>(aPixelAlgorithmInput);
-                var aPixelFunc = aJuliaPixelFunc;
                 foreach (var aPixelCoord in aPixelCoords)
                 {
                     var aPixelIdx = aPixelCoord.Item2 * aDx + aPixelCoord.Item1;
                     var aColor = aPixelAlgorithm.RenderPixel(aPixelCoord.Item1, aPixelCoord.Item2);
-                    //var aColor = aPixelFunc(aPixelCoord);
-                    //var aColor = aMandelPixelFunc(aPixelCoord);
+
                     aPixels[aPixelIdx] = aColor;
                 }
             });
@@ -879,6 +803,7 @@ namespace CbFractals.ViewModel.Mandelbrot
         }
         internal CMandelbrotState(CMandelbrotState aPreviousState, CBeginRenderMovieEnum aEnum) : this(aPreviousState)
         {
+            this.MainWindow.ProgressionManager.BeginRender();
             this.RenderMovieIsPending = true;
             this.StateEnum = CStateEnum.BeginRenderMovie;
         }
@@ -954,7 +879,19 @@ namespace CbFractals.ViewModel.Mandelbrot
         }
         internal CMandelbrotState(CMandelbrotState aPreviousState, CNextFrameEnum aCmd) : this(aPreviousState)
         {
-            this.MainWindow.ProgressionManager.Parameters[CParameterEnum.FrameIndex].Constant.Increment();
+           // this.MainWindow.ProgressionManager.Parameters[CParameterEnum.FrameIndex].Constant.Increment();
+            var aSecond = this.MainWindow.ProgressionManager.Parameters[CParameterEnum.SecondIndex].Constant.As<CDoubleConstant>();
+            var aFps = this.MainWindow.ProgressionManager.Parameters[CParameterEnum.FramesPerSecond].Constant.As<CDoubleConstant>().Value;
+            var aOldSecond = aSecond.Value;
+            var aNewSecond = aOldSecond + 1d / aFps;
+            aSecond.Value = aNewSecond;
+
+            var aFrameIndex = this.MainWindow.ProgressionManager.Parameters[CParameterEnum.FrameIndex].Constant.As<CDoubleConstant>();
+            var aOldFrameIndex = aFrameIndex.Value;
+            var aNewFrameIndex = Math.Floor(aOldFrameIndex + 1);
+            aFrameIndex.Value = aNewFrameIndex;
+
+
             this.StateEnum = CStateEnum.NextFrame;
         }
 
@@ -971,6 +908,7 @@ namespace CbFractals.ViewModel.Mandelbrot
         internal CMandelbrotState(CMandelbrotState aPreviousState, CEndRenderMovieEnum aCmd) : this(aPreviousState)
         {
             this.RenderMovieIsPending = false;
+            this.MainWindow.ProgressionManager.EndRender();
 
             this.StateEnum = CStateEnum.EndRenderMovie;
         }
@@ -1003,6 +941,8 @@ namespace CbFractals.ViewModel.Mandelbrot
             this.RenderMovieIsPending = false;
             this.RenderFrameIsPending = false;
             this.RenderMovieCancelIsPending = false;
+            this.MainWindow.ProgressionManager.EndRender();
+
             this.StateEnum = CStateEnum.EndCancelRenderMovie;
         }
         internal void EndCancelRenderMovie()

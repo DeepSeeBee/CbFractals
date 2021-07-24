@@ -18,6 +18,8 @@ namespace CbFractals.ViewModel.SceneManager
 
             this.Parameters.Build();
 
+            this.UpdateCurrentValues();
+
             this.RenderFrameOnChangeValueIsEnabled = true;
         }
 
@@ -29,8 +31,30 @@ namespace CbFractals.ViewModel.SceneManager
         private bool RenderFrameOnChangeValueIsEnabled;
         internal void OnChangeValue(CValueNode aValueNode)
         {
-            //if(object.ReferenceEquals(aValueNode, this.Parameters[CParameterEnum.FramePos].Constant))
+            this.UpdateCurrentValues();
             this.OnChangeRenderFrameOnDemand();
+        }
+
+        private void UpdateCurrentValues()
+        {
+            foreach (var aParameter in this.Parameters.Parameters)
+            {
+                aParameter.UpdateCurrentValue();
+            }
+        }
+
+        internal void DisableRenderFrame(Action aAction)
+        {
+            var aOldValue = this.RenderFrameOnChangeValueIsEnabled;
+            this.RenderFrameOnChangeValueIsEnabled = false;
+            try
+            {
+                aAction();
+            }
+            finally
+            {
+                this.RenderFrameOnChangeValueIsEnabled = aOldValue;
+            }
         }
 
         internal void OnChangeRenderFrameOnDemand()
@@ -48,5 +72,21 @@ namespace CbFractals.ViewModel.SceneManager
         private CEntpreller BeginRenderEntprellerM;
         private CEntpreller BeginRenderEntpreller => CLazyLoad.Get(ref this.BeginRenderEntprellerM, () => new CEntpreller(this.Dispatcher, () => new Action(delegate () { this.MandelbrotState.BeginRenderFrame(); })));
         #endregion
+        #region Render
+        internal void BeginRender()
+        {
+            this.DisableRenderFrame(delegate ()
+            {
+                this.MainWindow.ProgressionManager.Parameters.SetFrameIndexByConst(0);
+
+            });
+        }
+        internal void EndRender()
+        {
+            this.MainWindow.ProgressionManager.Parameters.SetFrameIndexBySecondIndex();
+        }
+        #endregion
+
+
     }
 }

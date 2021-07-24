@@ -1,6 +1,7 @@
 ﻿using CbFractals.Tools;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace CbFractals.ViewModel.PropertySystem
@@ -23,26 +24,38 @@ namespace CbFractals.ViewModel.PropertySystem
         private CConstant MinM;
         internal CConstant Min => CLazyLoad.Get(ref this.MinM, () => this.NewConstant(this, Name_Min));
         public CConstant VmMin => this.Min;
-        private CConstant MaxM;
-        internal CConstant Max => CLazyLoad.Get(ref this.MaxM, () => this.NewConstant(this, Name_Max));
-        public CConstant VmMax => this.Max;
+        private CConstant MaxConstantM;
+        internal CConstant MaxConstant => CLazyLoad.Get(ref this.MaxConstantM, () => this.NewConstant(this, Name_Max));
+        private CParameter MaxParameterNullable { get; set; }
+        internal CValueNode Max => this.MaxParameterNullable is object ? (CValueNode)this.MaxParameterNullable : (CValueNode)this.MaxConstant;
+        public CValueNode VmMax => this.Max;
 
         internal abstract CConstant NewConstant(CValueNode aParentValueNode, CNameEnum aName);
         #endregion        
         #region LinearProgression
         internal readonly CMappedProgression MappedProgression;
         #endregion
+        #region ParameterRefProgression
+        private CParameterRefProgression ParameterRefProgressionM;
+        internal CParameterRefProgression ParameterRefProgression => CLazyLoad.Get(ref this.ParameterRefProgressionM, () => new CParameterRefProgression(this, CNameEnum.ParameterRef));
+        #endregion
+        #region FuncProgression
+        private CFuncProgression FuncProgressionM;
+        internal CFuncProgression FuncProgression => CLazyLoad.Get(ref this.FuncProgressionM, () => new CFuncProgression(this, CNameEnum.FuncProgression));
+        #endregion
         #region Progressions
-        internal IEnumerable<CProgression> Progressions
+        private IEnumerable<CProgression> ProgressionsPrivate
         {
             get
             {
                 yield return this.Constant;
-                if (this.MappedProgression.Selectable)
-                    yield return this.MappedProgression;
+                yield return this.MappedProgression;
+                yield return this.ParameterRefProgression;
+                yield return this.FuncProgression;
             }
         }
-        public IEnumerable<CProgression> VmProgressions => this.Progressions;
+        internal IEnumerable<CProgression> Progressions => this.ProgressionsPrivate.Where(p => p.Selectable);
+        public IEnumerable<CProgression> VmProgressions => this.Progressions.OrderBy(p=>p.VmName);
         internal override IEnumerable<CValueNode> ValueSources => this.Progressions;
         internal override IEnumerable<CValueNode> SubValueNodes
         {
@@ -53,7 +66,9 @@ namespace CbFractals.ViewModel.PropertySystem
                 foreach (var aProgression in this.Progressions)
                     yield return aProgression;
                 yield return this.Min;
-                yield return this.Max;
+                yield return this.MaxConstant;
+                if (this.MaxParameterNullable is object)
+                    yield return this.MaxParameterNullable;
             }
         }
         #endregion
@@ -65,7 +80,8 @@ namespace CbFractals.ViewModel.PropertySystem
             set
             {
                 this.ProgressionM = value;
-                this.ParentProgressionManager.OnChangeRenderFrameOnDemand();
+                this.OnValueChanged();
+                //this.ParentProgressionManager.OnChangeRenderFrameOnDemand();
                 this.OnPropertyChanged(nameof(this.VmProgression));
             }
         }
@@ -86,7 +102,8 @@ namespace CbFractals.ViewModel.PropertySystem
 
             this.Progression = this.Constant;
             this.Min.SetDefaultMin();
-            this.Max.SetDefaultMax();
+            this.MaxConstant.SetDefaultMax();
+            this.CurrentValue.SetEditable(false);
 
             foreach (var aProgression in this.Progressions)
             {
@@ -95,16 +112,32 @@ namespace CbFractals.ViewModel.PropertySystem
         }
         internal T As<T>() where T : CParameter => (T)this;
 
-        internal void SetConst<T>(T v)
+        internal void SetConst<T>(T v, bool aSelect = false)
         {
             this.Constant.As<CConstant<T>>().Value = v;
+            if(aSelect)
+            {
+                this.Progression = this.Constant;
+            }
         }
         internal void SetConst<T>(T aValue, T aMin, T aMax)
         {
             this.SetConst(aValue);
             this.Min.As<CConstant<T>>().Value = aMin;
-            this.Max.As<CConstant<T>>().Value = aMax;
+            this.MaxConstant.As<CConstant<T>>().Value = aMax;
         }
+
+        internal void SetParameterRef(CParameter aParameter, bool aSelect = false)
+        {
+            this.ParameterRefProgression.ParameterRef.Parameter = aParameter;
+            if(aSelect)
+            {
+                this.Progression = this.ParameterRefProgression;
+            }
+        }
+
+        internal void SetParameterRef(CParameterEnum e, bool aSelect = false)
+            => this.SetParameterRef(this.ParentProgressionManager.Parameters[e], aSelect);
 
         internal void SetMappedProgression(double aMappedMin, double aMappedMax)
         {
@@ -113,14 +146,34 @@ namespace CbFractals.ViewModel.PropertySystem
             aMappedProgression.MappedMax.Value = aMappedMax;
         }
 
-        internal void SetProgression(double aFrom, double aTo)
-        {
-            this.As<CParameter<double>>().Min.Value = aFrom;
-            this.As<CParameter<double>>().Max.Value = aTo;
-        }
+        //internal void SetProgression(double aFrom, double aTo)
+        //{
+        //    this.As<CParameter<double>>().Min.Value = aFrom;
+        //    this.As<CParameter<double>>().MaxConstant.Value = aTo;
+        //}
         #endregion
+        #region ActualValue
+        private CConstant CurrentValueM;
+        private CConstant CurrentValue => CLazyLoad.Get(ref this.CurrentValueM, () => this.NewConstant(this, CNameEnum.CurrentValue));
+        public CConstant VmCurrentValue => this.CurrentValue;
+        internal void UpdateCurrentValue()
+            => this.CurrentValue.SetTypelessValue(this.GetTypelessValue());
+        internal void SetMax(CParameter p)
+            => this.MaxParameterNullable = p;
+        internal void SetMax(CParameterEnum p)
+            => this.SetMax(this.ParentProgressionManager.Parameters[p]);
+        #endregion
+        internal override CValueNodeGuiEnum ValueNodeGuiEnum => CValueNodeGuiEnum.ParameterCurrentValue;
+        internal override void SetEditable(bool v)
+        {
+            base.SetEditable(v);
+            this.ParameterRefProgression.SetEditable(v);
+        }
 
-
+        internal void SetConst()
+        {
+            this.Progression = this.Constant;
+        }
     }
 
     public abstract class CParameter<T> : CParameter
@@ -130,7 +183,7 @@ namespace CbFractals.ViewModel.PropertySystem
         {
         }
         internal new CConstant<T> Min => (CConstant<T>)base.Min;
-        internal new CConstant<T> Max => (CConstant<T>)base.Max;
+        internal new CConstant<T> MaxConstant => (CConstant<T>)base.MaxConstant;
     }
 
     public abstract class CEnumParameter<T> : CParameter
@@ -164,9 +217,11 @@ namespace CbFractals.ViewModel.PropertySystem
         }
         internal override CConstant NewConstant(CValueNode aParentValueNode, CNameEnum aName)
             => new CDoubleConstant(aParentValueNode, aName);
-        internal override object GetTypelessValue() => this.GetMappedValue();
+        internal override object GetTypelessValue() => this.MapToRange ? this.GetMappedValue() : base.GetTypelessValue();
+
+        internal bool MapToRange = true;
         internal double GetMappedValue()
-            => ((double)base.GetTypelessValue()).Map(0d, 1d, this.Min.Value, this.Max.Value);
+            => ((double)base.GetTypelessValue()).Map(0d, 1d, this.Min.Value, this.Max.GetDoubleValue());
         internal override object ConverTo(object aValue) => Convert.ToDouble(aValue);
         internal override void Build()
         {
@@ -174,6 +229,20 @@ namespace CbFractals.ViewModel.PropertySystem
 
             this.MappedProgression.MappedMin.Value = 0d;
             this.MappedProgression.MappedMax.Value = 1d;
+        }
+
+        internal void SetFuncProgression(CNameEnum aFuncNameEnum, bool aSelect = false, params CParameterEnum[] aParameters)
+        {
+            var aFunc = this.FuncProgression.Funcs.Find(aFuncNameEnum);
+            this.FuncProgression.Func = aFunc;
+            if(aSelect)
+            {
+                this.Progression = this.FuncProgression;
+            }
+            foreach(var i in Enumerable.Range(0, aParameters.Length))
+            {
+                aFunc.InputParameters.InputParameters[i].ParameterRef.SetValueSource(aParameters[i]);
+            }            
         }
     }
 

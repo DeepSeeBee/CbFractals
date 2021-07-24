@@ -7,24 +7,24 @@ namespace CbFractals.ViewModel.SceneManager
     internal struct CTimePosition
     {
         internal CTimePosition(TimeSpan aTimeSpan) { this.TimeSpan = aTimeSpan; }
-        internal CTimePosition(double aSeconds) : this(TimeSpan.FromSeconds(aSeconds)) { }
+        internal static CTimePosition FromSeconds(double aSeconds) => new CTimePosition(TimeSpan.FromSeconds(aSeconds));
         internal readonly TimeSpan TimeSpan;
         internal CBeatPosition ToBeatPosition(double aBpm)
             => new CBeatPosition(this.TimeSpan.TotalMinutes * aBpm);
+        internal CFramePosition ToFramePosition(double aFps)
+            => new CFramePosition(this.TimeSpan.TotalSeconds * aFps);
     }
 
     internal struct CFramePosition
     {
-        internal CFramePosition(int aFramePos, double aFps)
+        internal CFramePosition(double aFramePos)
         {
             this.FramePos = aFramePos;
-            this.Fps = aFps;
         }
-        internal readonly int FramePos;
-        internal readonly double Fps;
-
-        internal CTimePosition ToTimePosition()
-            => new CTimePosition(((double)this.FramePos) / this.Fps);
+        internal readonly double FramePos;
+        internal CTimePosition ToTimePosition(double aFps)
+            => CTimePosition.FromSeconds(((double)this.FramePos) / aFps);
+        internal Int64 FrameIdx => (Int64) Math.Floor(this.FramePos);
     }
 
     internal struct CBeatPosition

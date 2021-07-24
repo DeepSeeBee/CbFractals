@@ -209,11 +209,11 @@ namespace CbFractals.ViewModel.Mandelbrot
             var aDx = this.SizePxl.Item1;
             var aDy = this.SizePxl.Item2;
             var aParameters = this.Parameters;
-            var itm = aParameters.Get<Int64>(CParameterEnum.Iterations); // 300; //after how much iterations the function should stop
+            var itm = Convert.ToInt64(aParameters.Get<double>(CParameterEnum.Iterations)); // 300; //after how much iterations the function should stop
 
             //pick some values for the constant c, this determines the shape of the Julia Set
-            var cRe = aParameters.Get<double>(CParameterEnum.JuliaRealPart);// -0.7d;    // real part of the constant c, determinate shape of the Julia Set
-            var cIm = aParameters.Get<double>(CParameterEnum.JuliaImaginaryPart); //0.27015d; // imaginary part of the constant c, determinate shape of the Julia Set
+            var cRe = aParameters.Get<double>(CParameterEnum.JuliaPartReal);// -0.7d;    // real part of the constant c, determinate shape of the Julia Set
+            var cIm = aParameters.Get<double>(CParameterEnum.JuliaPartImaginary); //0.27015d; // imaginary part of the constant c, determinate shape of the Julia Set
                                                                                   //cIm = 0.3d;
                                                                                   //cRe = -0.68;
             var h = aDy;

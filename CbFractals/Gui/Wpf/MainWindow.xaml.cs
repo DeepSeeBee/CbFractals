@@ -96,7 +96,7 @@ namespace CbFractals.Gui.Wpf
         public CMandelbrotState VmState => this.State;
         #endregion
         #region States
-        private ObservableCollection<CMandelbrotState> StatesM = new ObservableCollection<CMandelbrotState>();
+        private readonly ObservableCollection<CMandelbrotState> StatesM = new ObservableCollection<CMandelbrotState>();
         internal ObservableCollection<CMandelbrotState> States => this.StatesM;
         public ObservableCollection<CMandelbrotState> VmStates => this.States;
         #endregion
