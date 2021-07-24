@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace CbFractals.ViewModel.PropertySystem
+namespace CbFractals.ViewModel.SceneManager
 {
     internal struct CTimePosition
     {
