@@ -1,9 +1,10 @@
-﻿<Window x:Class="CbFractals.MainWindow"
+﻿<Window x:Class="CbFractals.Gui.Wpf.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CbFractals"
+        xmlns:psysgui="clr-namespace:CbFractals.Gui.Wpf.PropertySystem"
         mc:Ignorable="d"
         Title="CbFractals" Height="900" Width="1400">
     <Grid>
@@ -167,14 +168,14 @@
                                                 <GridViewColumn Header="Min">
                                                     <GridViewColumn.CellTemplate>
                                                         <DataTemplate>
-                                                            <local:CValueSourceGui MinWidth="50" DataContext="{Binding VmMin}"/>
+                                                            <psysgui:CValueSourceGui MinWidth="50" DataContext="{Binding VmMin}"/>
                                                         </DataTemplate>
                                                     </GridViewColumn.CellTemplate>
                                                 </GridViewColumn>
                                                 <GridViewColumn Header="Max">
                                                     <GridViewColumn.CellTemplate>
                                                         <DataTemplate>
-                                                            <local:CValueSourceGui MinWidth="50" DataContext="{Binding VmMax}"/>
+                                                            <psysgui:CValueSourceGui MinWidth="50" DataContext="{Binding VmMax}"/>
                                                         </DataTemplate>
                                                     </GridViewColumn.CellTemplate>
 
@@ -207,8 +208,8 @@
                                         </ListBox>
                                     </GroupBox>
                                     <GroupBox Header="{Binding VmName}" DataContext="{Binding VmProgression}">
-                                        <local:CValueSourceGui >
-                                        </local:CValueSourceGui>
+                                        <psysgui:CValueSourceGui>
+                                        </psysgui:CValueSourceGui>
                                     </GroupBox>
                                     <!--<Control Style="{DynamicResource ValueSourceControlStyle}" DataContext="{Binding VmProgression}">
                                                 

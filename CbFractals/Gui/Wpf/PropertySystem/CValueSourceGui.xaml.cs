@@ -11,7 +11,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace CbFractals
+namespace CbFractals.Gui.Wpf.PropertySystem
 {
     /// <summary>
     /// Interaktionslogik für CValueSourceGui.xaml

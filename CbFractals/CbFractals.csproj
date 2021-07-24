@@ -4,10 +4,12 @@
     <OutputType>WinExe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <UseWPF>true</UseWPF>
+    <StartupObject>CbFractals.App</StartupObject>
   </PropertyGroup>
 
   <ItemGroup>
     <Folder Include="DefaultSettings\" />
+    <Folder Include="Docu\ClassDiagrams\" />
   </ItemGroup>
 
 </Project>
