@@ -34,7 +34,7 @@
     <Position X="4.617" Y="4.545" Height="0.729" Width="1.815" />
   </Comment>
   <Comment CommentText="DoubleParameter-Value may be mapped using the range 0-1 to interpolate CNumericParameter.Min / Max.">
-    <Position X="28.335" Y="10.111" Height="1.091" Width="1.713" />
+    <Position X="26.53" Y="9.601" Height="1.091" Width="1.713" />
   </Comment>
   <Comment CommentText="CValueNodeGui switches gui appearance following the GuiNodeEnum.">
     <Position X="11.539" Y="9.209" Height="0.94" Width="1.713" />
@@ -189,7 +189,7 @@
       <FileName>ViewModel\PropertySystem\CParameter.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="CbFractals.ViewModel.PropertySystem.CDoubleParameter">
+  <Class Name="CbFractals.ViewModel.PropertySystem.CDoubleParameter" Collapsed="true">
     <Position X="26.5" Y="8.75" Width="1.75" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAABAAAAAAAAAAAAABAAgAAAAAAAFAAEAgA=</HashCode>
@@ -240,34 +240,6 @@
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAABACAAAAAAAAAAAAAAAAAAgAAAAAAA=</HashCode>
       <FileName>ViewModel\PropertySystem\CParameters.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="CbFractals.ViewModel.PropertySystem.CXmlValueBase" Collapsed="true">
-    <Position X="23.75" Y="17.75" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAEAAAAAAIAAAAAAAAAAAAAAAAAAAAgAAAAAAA=</HashCode>
-      <FileName>ViewModel\PropertySystem\CPersistency.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="CbFractals.ViewModel.PropertySystem.CXmlValue" Collapsed="true">
-    <Position X="24.75" Y="19" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>ViewModel\PropertySystem\CPersistency.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="CbFractals.ViewModel.PropertySystem.CXmlSelectedValueSource" Collapsed="true">
-    <Position X="22.5" Y="20.25" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>ViewModel\PropertySystem\CPersistency.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="CbFractals.ViewModel.PropertySystem.CXmlProgressionSnapshot" Collapsed="true">
-    <Position X="27.25" Y="17.75" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAACAIAAAAAAAAAAAAAAIAAAQAAAAAAAAAAgAAAEAoA=</HashCode>
-      <FileName>ViewModel\PropertySystem\CPersistency.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="CbFractals.ViewModel.PropertySystem.CProgression" Collapsed="true">
@@ -512,7 +484,7 @@
   <Enum Name="CbFractals.ViewModel.PropertySystem.CParameterEnum" Collapsed="true">
     <Position X="26" Y="2" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>gCAAEAAIAAAAACAgGAiAAEIBAAAAQAAIAAIKAAgAgAA=</HashCode>
+      <HashCode>gCAAEAAIAAAAACAkGAiAAEIBAAAAQAAIAAIKAAgAgAA=</HashCode>
       <FileName>ViewModel\PropertySystem\CParameters.cs</FileName>
     </TypeIdentifier>
   </Enum>

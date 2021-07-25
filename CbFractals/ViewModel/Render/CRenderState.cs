@@ -536,11 +536,12 @@ namespace CbFractals.ViewModel.Mandelbrot
         {
             var aStopwatch = new Stopwatch();
             aStopwatch.Start();
-            var aSizePxl = aRenderFrameInput.Item1;
-            var aDx = (int)aSizePxl.Item1;
-            var aDy = (int)aSizePxl.Item2;
+            var aSizePxlDbl = aRenderFrameInput.Item1;
+            var aDx = (int)aSizePxlDbl.Item1;
+            var aDy = (int)aSizePxlDbl.Item2;
+            var aSizePxlInt = new CVec2Int(aDx, aDy);
             var aSizeMnd = aRenderFrameInput.Item2;
-            var aCenterMnd = aSizeMnd.GetRectCenter(); // aRenderInput.Item3;
+            var aCenterMnd = aSizeMnd.GetRectCenter();
             //var aThreadCount = 1;
             var aThreadCount = 90;
             var aThreadLinesRest = aDy % aThreadCount;
@@ -548,7 +549,14 @@ namespace CbFractals.ViewModel.Mandelbrot
             var aThreadInputs = from aThreadId in Enumerable.Range(0, aThreadCount)
                                 select new CRenderFrameSegmentInput(aThreadId * aLinesPerThread, (aThreadId == aThreadCount - 1 && aThreadCount != 1 && aThreadLinesRest != 0) ? aThreadLinesRest : aLinesPerThread);
             var aPixels = new Color[aDx * aDy];
+            var aColorFkts = new double[aDx * aDy];
             var aParametersSnapshot = aRenderFrameInput.Item7;
+            var aBitmapSourceSink = new CBufferSink<BitmapSource>();
+            var aColorArrayToBitmapSourceSink = new CColorArrayToBitmapSourceSink(aBitmapSourceSink, aSizePxlInt);
+            var aColorArrayBufferSink = new CBufferSink<Color[]>(aColorArrayToBitmapSourceSink);
+            var aNullSink = new CNullSink<double[]>(); // TODO: Hier ModelWriter reinbauen.
+            var aColorFktArrayBufferSink = new CBufferSink<double[]>(aNullSink);
+            var aFlushSinks = new List<CSink>(aThreadCount);
             var aRenderPartFunc = new Action<CRenderFrameSegmentInput>(delegate (CRenderFrameSegmentInput aRenderFrameSegmentsInput)
             {
                 var aYStart = aRenderFrameSegmentsInput.Item1;
@@ -560,15 +568,29 @@ namespace CbFractals.ViewModel.Mandelbrot
                 var aColorAlgorithmEnum = aParametersSnapshot.Get<CColorAlgorithmEnum>(CParameterEnum.ColorAlgorithm);
                 var aColorAlgorithm = CTypeAttribute.GetByEnum(aColorAlgorithmEnum).DataType.New<CColorAlgorithm>(aColorAlgorithmInput);
                 var aPixelAlgoEnum = aParametersSnapshot.Get<CPixelAlgorithmEnum>(CParameterEnum.PixelAlgorithm1);
-                var aGetColor = new Func<double, Color>(d => aColorAlgorithm.GetColor(d));
-                var aPixelAlgorithmInput = new CPixelAlgorithmInput(aSizePxl, aSizeMnd, aParametersSnapshot, aGetColor);
-                var aPixelAlgorithm = CTypeAttribute.GetByEnum(aPixelAlgoEnum).DataType.New<CPixelAlgorithm>(aPixelAlgorithmInput);
+                var aGetColor = default(Func<double, Color>); // new Func<double, Color>(d => aColorAlgorithm.GetColor(d));
+                var aPixelAlgorithmInput = new CPixelAlgorithmInput(aSizePxlDbl, aSizeMnd, aParametersSnapshot, aGetColor);
+                var aPixelAlgorithm = CTypeAttribute.GetByEnum(aPixelAlgoEnum).DataType.New<CMandelbrotPixelAlgorithm>(aPixelAlgorithmInput);
+                var aArrayFragmentOffset = aYStart * aDx;
+                var aArrayFragmentSize = aYCount * aSizePxlInt.Item1;
+                var aColorFktBufferSink = new CArrayFragmentBufferedSink<double>(aColorFkts, aArrayFragmentOffset, aArrayFragmentSize, aColorFktArrayBufferSink);
+                var aColorBufferSink = new CArrayFragmentBufferedSink<Color>(aPixels, aArrayFragmentOffset, aArrayFragmentSize, aColorArrayBufferSink);
+                lock (aFlushSinks)
+                {
+                    aFlushSinks.Add(aColorFktBufferSink);
+                    aFlushSinks.Add(aColorBufferSink);
+                }
+                var aDoubleToColorAlgoSink = new CColorFktThroughColorAlgorithmSink(aColorAlgorithm, aColorBufferSink);
+                var aForks = new List<CSink<double>>();
+                aForks.Add(aDoubleToColorAlgoSink);
+                aForks.Add(aColorFktBufferSink);
+                var aColorFktSink = new CForkSink<double>(aForks.ToArray());
+
                 foreach (var aPixelCoord in aPixelCoords)
                 {
                     var aPixelIdx = aPixelCoord.Item2 * aDx + aPixelCoord.Item1;
-                    var aColor = aPixelAlgorithm.RenderPixel(aPixelCoord.Item1, aPixelCoord.Item2);
-
-                    aPixels[aPixelIdx] = aColor;
+                    var aColorFkt = aPixelAlgorithm.RenderPixel(aPixelCoord.Item1, aPixelCoord.Item2);
+                    aColorFktSink.Write(aColorFkt);
                 }
             });
 
@@ -578,62 +600,29 @@ namespace CbFractals.ViewModel.Mandelbrot
             {
                 aTask.Wait();
             }
-            var aColorToRgb24 = new Func<Color, byte[]>(c =>
+
+            aFlushSinks.Add(aColorFktArrayBufferSink);
+
+
+            foreach (var aFlushSink in aFlushSinks)
             {
-                var a = new byte[3];
-                a[0] = c.R;
-                a[1] = c.G;
-                a[2] = c.B;
-                return a;
-            });
-            var aPixelsRgb24a = (from aPixel in aPixels.Select(aColorToRgb24)
-                                 from aColor in aPixel
-                                 select aColor).ToArray();
-            var aBytesPerPixel = 3;
-            var aRest = (aBytesPerPixel * aDx) % 4;
-            var aStrideInBytes = aDx * aBytesPerPixel + aRest;
-            var aGap = new byte[aRest];
-            var aGetLine = new Func<int, IEnumerable<byte>>(aLine => aPixelsRgb24a.Skip(aLine * aDx * aBytesPerPixel).Take(aDx * aBytesPerPixel).Concat(aGap));
-            var aPixelsRgb24
-                = (from aLine in (from aY in Enumerable.Range(0, (int)aDy) select aGetLine(aY))
-                   from aByte in aLine
-                   select aByte).ToArray();
-            var aRarestAndDominatingColor = CColorDetector.GetRarestAndDominatingColor(aPixels);
-            var aRarestColor = aRarestAndDominatingColor.Item1;
-            var aDominatingColor = aRarestAndDominatingColor.Item2;
-            var aAutoCenter = false;
-            CVec2 aNewCenter;
-            if (aAutoCenter)
-            {
-                throw new NotImplementedException();
-                //var aMandelToPixel = new Func<CVec2, CVec2>(v => MandelToPixel(v, aImageSize, aSizeMnd)); // v => v.Subtract(aMandelRect.GetRectPos()).Divide(aMandelRect.GetRectSize()).Mul(aImageSize));
-                //var aPixelToMandel = new Func<CVec2, CVec2>(v => PixelToMandel(v, aImageSize, aSizeMnd)); // v =>  v.Divide(aImageSize).Mul(aMandelRect.GetRectSize()).Add(aMandelRect.GetRectPos()));
-                //var aPixelCenter = aMandelToPixel(aCenterMnd);
-                //var aCenterDetector = new CColorDetector(CColorDetector.GetColor(aRarestColor), aPixelCenter, aImageSize);
-                //foreach (var aPixelCoord in aPixelCoords)
-                //{
-                //    var aPixelIdx = aPixelCoord.Item2 * aDy + aPixelCoord.Item1;
-                //    var aPixel = aPixels[aPixelIdx];
-                //    var aPixelCoordVec2 = aPixelCoord.ToVec2();
-                //    aCenterDetector.Add(aPixel, aPixelCoordVec2);
-                //}
-                //aNewCenter = aPixelToMandel(aCenterDetector.NewCenter);
-            }
-            else
-            {
-                aNewCenter = aCenterMnd;
+                aFlushSink.Flush();
             }
 
-            var aNewBitmapSource = new Func<BitmapSource>(() => BitmapSource.Create((int)aDx, (int)aDy, 96d, 96d, PixelFormats.Rgb24, default(BitmapPalette), aPixelsRgb24, aStrideInBytes));
+            var aNewCenter = aCenterMnd;
+            var aNewBitmapSource = new Func<BitmapSource>(() => {
+                aColorArrayBufferSink.Flush();
+                aColorArrayToBitmapSourceSink.Flush();
+                return aBitmapSourceSink.Buffer;
+            });
             var aNewRenderFrameOutput = new Func<CRenderFrameOutput>(() => new CRenderFrameOutput
             (
                 aNewBitmapSource(),
                 aSizeMnd,
                 new CVec2(0, 0),
-                aRarestColor,
-                aDominatingColor,
+                default, // aRarestColor,
+                default, //aDominatingColor,
                 aNewCenter
-            //aRenderFrameInput.Item7
             ));
             aStopwatch.Stop();
             System.Diagnostics.Debug.Print(nameof(CMandelbrotState) + "." + nameof(BeginRenderFrameCore) + " took " + aStopwatch.Elapsed.TotalSeconds + " second(s)." + Environment.NewLine);

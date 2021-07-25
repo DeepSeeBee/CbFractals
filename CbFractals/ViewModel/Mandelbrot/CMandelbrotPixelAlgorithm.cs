@@ -13,14 +13,66 @@ namespace CbFractals.ViewModel.Mandelbrot
     using CVec4 = Tuple<double, double, double, double>;
     using CVec2Int = Tuple<int, int>;
 
-    internal sealed class CClassicMandelbrotSetPixelAlgorithm : CPixelAlgorithm
+    internal abstract class CMandelbrotPixelAlgorithm : CPixelAlgorithm<double>
+    {
+        internal CMandelbrotPixelAlgorithm(CPixelAlgorithmInput aInput)
+        {
+            this.PixelAlgorithmInput = aInput;
+            var aParameters = aInput.ParameterSnapshot;
+            var aZoom1 = aParameters.Get<double>(CParameterEnum.Zoom);
+            var aZoom2 = 1d / aZoom1;
+            var aCenterX = aParameters.Get<double>(CParameterEnum.CenterX);
+            var aCenterY = aParameters.Get<double>(CParameterEnum.CenterY);
+            var aCenter = new CVec2(aCenterX - 0.5d, aCenterY - 0.5d).Mul(2d);
+            var aSizeMnd1 = CMandelbrotState.SizeMndFullRange;
+            var aSizeMnd1Center1 = aSizeMnd1.GetRectCenter();
+            var aSizeMnd1Center2 = aSizeMnd1Center1.Add(aSizeMnd1.GetRectSize().Mul(aCenter));
+            var aSizeMnd2 = aSizeMnd1.GetRectAllignedAtCenter(aSizeMnd1Center2);
+            var aSizeMnd3 = aSizeMnd2.Zoom(aZoom2);
+            var aSizeMnd = aSizeMnd3;
+            this.SizeMnd = aSizeMnd;
+        }
+
+        internal readonly CPixelAlgorithmInput PixelAlgorithmInput;
+        internal CVec2 SizePxl => this.PixelAlgorithmInput.SizePxl;
+        internal readonly CVec4 SizeMnd;
+        internal CParameterSnapshot Parameters => this.PixelAlgorithmInput.ParameterSnapshot;
+        internal Func<double, Color> GetColor => this.PixelAlgorithmInput.GetColorFunc;
+
+        internal CVec2 GetMandelPos(CVec2Int aPixelCoord)
+        {
+            var aSizeMnd = this.SizeMnd;
+            var aDx = this.SizePxl.Item1;
+            var aDy = this.SizePxl.Item2;
+            var aScale = new Func<CVec2, double, double>(delegate (CVec2 aRange, double aPos)
+            {
+                var aDelta = aRange.Item2 - aRange.Item1;
+                var aOffset = aDelta * aPos;
+                var aScaled = aRange.Item1 + aOffset;
+                return aScaled;
+            });
+            var aGetMandelPos = new Func<CVec2Int, CVec2>
+            (
+                v =>
+                new CVec2
+                (
+                    aScale(aSizeMnd.GetRectRangeX(), v.Item1 / (double)aDx),
+                    aScale(aSizeMnd.GetRectRangeY(), v.Item2 / (double)aDy)
+                )
+            );
+            var aMandelPos = aGetMandelPos(aPixelCoord);
+            return aMandelPos;
+        }
+    }
+
+    internal sealed class CClassicMandelbrotSetPixelAlgorithm : CMandelbrotPixelAlgorithm
     {
         public CClassicMandelbrotSetPixelAlgorithm(CPixelAlgorithmInput aInput) : base(aInput)
         {
         }
 
 
-        internal override Color RenderPixel(int aX, int aY)
+        internal override double RenderPixel(int aX, int aY)
         {
             var aPixelCoord = new CVec2Int(aX, aY);
             var aDx = this.SizePxl.Item1;
@@ -51,12 +103,13 @@ namespace CbFractals.ViewModel.Mandelbrot
                 it = it + 1 - nu;
             }
             var itf = (float)it / (float)itm;
-            var c = this.GetColor(itf);
-            return c;
+            return itf;
+            //var c = this.GetColor(itf);
+            //return c;
         }
     }
 
-    internal sealed class CSingleJuliaMandelbrotSetPixelAlgorithm : CPixelAlgorithm
+    internal sealed class CSingleJuliaMandelbrotSetPixelAlgorithm : CMandelbrotPixelAlgorithm
     {
         public CSingleJuliaMandelbrotSetPixelAlgorithm(CPixelAlgorithmInput aInput) : base(aInput)
         {
@@ -82,7 +135,7 @@ namespace CbFractals.ViewModel.Mandelbrot
 
         private readonly CVec2 JuliaDeltaPos;
 
-        internal override Color RenderPixel(int aX, int aY)
+        internal override double RenderPixel(int aX, int aY)
         {
             var aPixelCoord = new CVec2Int(aX, aY);
             var aDx = this.SizePxl.Item1;
@@ -117,18 +170,19 @@ namespace CbFractals.ViewModel.Mandelbrot
                 if ((newRe * newRe + newIm * newIm) > 4) break;
             }
             var itf = (float)it / (float)itm;
-            var c = this.GetColor(itf);
-            return c;
+            return itf;
+            //var c = this.GetColor(itf);
+            //return c;
         }
     }
 
-    internal sealed class CMultiJuliaMandelbrotSetPixelAlgorithm : CPixelAlgorithm
+    internal sealed class CMultiJuliaMandelbrotSetPixelAlgorithm : CMandelbrotPixelAlgorithm
     {
         public CMultiJuliaMandelbrotSetPixelAlgorithm(CPixelAlgorithmInput aInput) : base(aInput)
         {
 
         }
-        internal override Color RenderPixel(int aX, int aY)
+        internal override double RenderPixel(int aX, int aY)
         {
             //throw new NotImplementedException();
             /*
@@ -187,10 +241,12 @@ namespace CbFractals.ViewModel.Mandelbrot
                 ++it;
             }
             var itf = (double)it / (double)itm;
-            var cl = it == itm
-                   ? Colors.Black
-                   : this.GetColor(itf);
-            return cl;
+            return itf;
+
+            //var cl = it == itm
+            //       ? Colors.Black
+            //       : this.GetColor(itf);
+            //return cl;
 
             /*
                     for each pixel (x, y) on the screen, do:
