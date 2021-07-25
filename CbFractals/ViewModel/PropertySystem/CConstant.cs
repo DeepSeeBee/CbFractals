@@ -136,16 +136,16 @@ namespace CbFractals.ViewModel.PropertySystem
 
     }
 
-    public sealed class CDataTypeAttribute : Attribute
+    public sealed class CTypeAttribute : Attribute
     {
-        public CDataTypeAttribute(Type aConstantType)
+        public CTypeAttribute(Type aType)
         {
-            this.DataType = aConstantType;
+            this.DataType = aType;
         }
         internal readonly Type DataType;
 
-        internal static CDataTypeAttribute GetByEnum<TEnum>(TEnum e)
-            => typeof(TEnum).GetField(e.ToString()).GetCustomAttributes(typeof(CDataTypeAttribute), false).Cast<CDataTypeAttribute>().Single();
+        internal static CTypeAttribute GetByEnum<TEnum>(TEnum e)
+            => typeof(TEnum).GetField(e.ToString()).GetCustomAttributes(typeof(CTypeAttribute), false).Cast<CTypeAttribute>().Single();
         internal CParameter NewParameter(params object[] aArgs)
             => CParameterClassRegistry.Singleton[this.DataType].New<CParameter>(aArgs);
 

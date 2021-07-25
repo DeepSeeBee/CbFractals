@@ -254,6 +254,7 @@ namespace CbFractals.ViewModel.PropertySystem
             this.Dic.Add(typeof(Int64), typeof(CInt64Parameter));
             this.Dic.Add(typeof(double), typeof(CDoubleParameter));
             this.Dic.Add(typeof(CPixelAlgorithmEnum), typeof(CPixelAlgorithmEnumParameter));
+            this.Dic.Add(typeof(CColorAlgorithmEnum), typeof(CColorAlgorithmEnumParameter));
         }
         internal static readonly CParameterClassRegistry Singleton = new CParameterClassRegistry();
         private readonly Dictionary<Type, Type> Dic = new Dictionary<Type, Type>();

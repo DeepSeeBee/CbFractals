@@ -136,6 +136,8 @@ namespace CbFractals.ViewModel.PropertySystem
         [CGuid("f0e2139e-6483-40a0-926c-0e749b571207")]
         Func_SecondsToFrameCount_In_Seconds,
 
+        [CGuid("f055b084-182f-4806-b29c-9bcebc67a50c")]
+        Parameter_ColorAlgorithm,
     }
 
     public sealed class CNameAttribute : Attribute
@@ -149,32 +151,32 @@ namespace CbFractals.ViewModel.PropertySystem
 
     public enum CParameterEnum
     {
-        [CDataType(typeof(double))]
+        [CType(typeof(double))]
         [CName(CNameEnum.Parameter_CenterX)]
         CenterX,
 
         [CName(CNameEnum.Parameter_CenterY)]
-        [CDataType(typeof(double))]
+        [CType(typeof(double))]
         CenterY,
 
         [CName(CNameEnum.Parameter_DoubleZero)]
-        [CDataType(typeof(double))]
+        [CType(typeof(double))]
         DoubleZero,
 
         [CName(CNameEnum.Parameter_FrameCount)]
-        [CDataType(typeof(double))]
+        [CType(typeof(double))]
         FrameCount,
 
         [CName(CNameEnum.Parameter_FrameIndex)]
-        [CDataType(typeof(double))]
+        [CType(typeof(double))]
         FrameIndex,
 
         [CName(CNameEnum.Parameter_JuliaPartReal)]
-        [CDataType(typeof(double))]
+        [CType(typeof(double))]
         JuliaPartReal,
 
         [CName(CNameEnum.Parameter_JuliaPartImaginary)]
-        [CDataType(typeof(double))]
+        [CType(typeof(double))]
         JuliaPartImaginary,
 
         //[CName(CNameEnum.Parameter_JuliaMoveX)]
@@ -186,61 +188,65 @@ namespace CbFractals.ViewModel.PropertySystem
         //JuliaMoveY, // TODO_OBSOLETE
 
         [CName(CNameEnum.Parameter_Zoom)]
-        [CDataType(typeof(double))]
+        [CType(typeof(double))]
         Zoom,
 
         [CName(CNameEnum.Parameter_Iterations)]
-        [CDataType(typeof(double))]
+        [CType(typeof(double))]
         Iterations,
 
         [CName(CNameEnum.Parameter_DarkenThresholdLo)]
-        [CDataType(typeof(double))]
+        [CType(typeof(double))]
         DarkenThresholdLo,
 
         [CName(CNameEnum.Parameter_DarkenThresholdHi)]
-        [CDataType(typeof(double))]
+        [CType(typeof(double))]
         DarkenThresholdHi,
 
         [CName(CNameEnum.Parameter_ColorPeriod)]
-        [CDataType(typeof(double))]
+        [CType(typeof(double))]
         ColorPeriod,
 
         [CName(CNameEnum.Parameter_ColorOffset)]
-        [CDataType(typeof(double))]
+        [CType(typeof(double))]
         ColorOffset,
         // Rotation
 
         [CName(CNameEnum.Parameter_PixelAlgorithm1)]
-        [CDataType(typeof(CPixelAlgorithmEnum))]
+        [CType(typeof(CPixelAlgorithmEnum))]
         PixelAlgorithm1,
 
         [CName(CNameEnum.Parameter_BeatIndex)]
-        [CDataType(typeof(double))]
+        [CType(typeof(double))]
         BeatIndex,
 
         [CName(CNameEnum.Parameter_BeatIndex_Max)]
-        [CDataType(typeof(double))]
+        [CType(typeof(double))]
         BeatIndex_Max,
 
         [CName(CNameEnum.Parameter_BeatsPerMinute)]
-        [CDataType(typeof(double))]
+        [CType(typeof(double))]
         BeatsPerMinute,
 
         [CName(CNameEnum.Parameter_BeatCount)]
-        [CDataType(typeof(double))]
+        [CType(typeof(double))]
         BeatCount,
 
         [CName(CNameEnum.Parameter_SecondIndex)]
-        [CDataType(typeof(double))]
+        [CType(typeof(double))]
         SecondIndex,
 
         [CName(CNameEnum.Parameter_SecondCount)]
-        [CDataType(typeof(double))]
+        [CType(typeof(double))]
         SecondCount,
 
         [CName(CNameEnum.Parameter_FramesPerSecond)]
-        [CDataType(typeof(double))]
+        [CType(typeof(double))]
         FramesPerSecond,
+
+        [CName(CNameEnum.Parameter_ColorAlgorithm)]
+        [CType(typeof(CColorAlgorithmEnum))]
+        ColorAlgorithm,
 
         _Count
     }
@@ -262,7 +268,7 @@ namespace CbFractals.ViewModel.PropertySystem
         {
             var aParameterCount = (int)CParameterEnum._Count;
             var aParameters = (from aIdx in Enumerable.Range(0, aParameterCount)
-                               select CDataTypeAttribute.GetByEnum((CParameterEnum)aIdx).NewParameter(this, (CParameterEnum)aIdx)).ToArray();
+                               select CTypeAttribute.GetByEnum((CParameterEnum)aIdx).NewParameter(this, (CParameterEnum)aIdx)).ToArray();
             this.Parameters = aParameters;
         }
         internal override void Build()

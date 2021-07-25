@@ -14,13 +14,13 @@ namespace CbFractals.ViewModel.Render
 
     internal enum CPixelAlgorithmEnum
     {
-        [CDataType(typeof(CClassicMandelbrotSetPixelAlgorithm))]
+        [CType(typeof(CClassicMandelbrotSetPixelAlgorithm))]
         MandelbrotClassicSet,
 
-        [CDataType(typeof(CSingleJuliaMandelbrotSetPixelAlgorithm))]
+        [CType(typeof(CSingleJuliaMandelbrotSetPixelAlgorithm))]
         MandelbrotJuliaSingle,
 
-        [CDataType(typeof(CMultiJuliaMandelbrotSetPixelAlgorithm))]
+        [CType(typeof(CMultiJuliaMandelbrotSetPixelAlgorithm))]
         MandelbrotJuliaMulti,
     }
     internal struct CPixelAlgorithmInput

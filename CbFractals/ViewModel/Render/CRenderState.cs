@@ -1,5 +1,6 @@
 ﻿using CbFractals.Gui.Wpf;
 using CbFractals.Tools;
+using CbFractals.ViewModel.Mandelbrot.Obsolete;
 using CbFractals.ViewModel.PropertySystem;
 using CbFractals.ViewModel.Render;
 using System;
@@ -555,42 +556,13 @@ namespace CbFractals.ViewModel.Mandelbrot
                 var aPixelCoords = from aY in Enumerable.Range(aYStart, aYCount)
                                    from aX in Enumerable.Range(0, (int)aDx)
                                    select new CVec2Int(aX, aY);
-                var aScale = new Func<CVec2, double, double>(delegate (CVec2 aRange, double aPos)
-                {
-                    var aDelta = aRange.Item2 - aRange.Item1;
-                    var aOffset = aDelta * aPos;
-                    var aScaled = aRange.Item1 + aOffset;
-                    return aScaled;
-                });
-                var aGetMandelPos = new Func<CVec2Int, CVec2>
-                (
-                    v =>
-                    new CVec2
-                    (
-                        aScale(aSizeMnd.GetRectRangeX(), v.Item1 / (double)aDx),
-                        aScale(aSizeMnd.GetRectRangeY(), v.Item2 / (double)aDy)
-                    )
-                );
-                var co = aParametersSnapshot.Get<double>(CParameterEnum.ColorOffset); //1.5f
-                var cperiod = aParametersSnapshot.Get<double>(CParameterEnum.ColorPeriod); // 1d;
-                var aDarkenThresholdLo = aParametersSnapshot.Get<double>(CParameterEnum.DarkenThresholdLo); // 0.1;
-                var aDarkenTheesholdHi = aParametersSnapshot.Get<double>(CParameterEnum.DarkenThresholdHi); // 0.3;
-                var aDarken = new Func<Color, double, Color>(delegate (Color c, double d)
-                { return Color.FromScRgb(1.0f, (float)(c.ScR * d), (float)(c.ScG * d), (float)(c.ScB * d)); });
-                var aGetColor = new Func<double, Color>(itf =>
-                {
-                    var c1 = this.Hue((itf + (1f / 3f * co)) * cperiod, 0d);
-                    var c2 = itf < aDarkenThresholdLo
-                           ? aDarken(c1, (itf / aDarkenThresholdLo))
-                           : itf > 1d - aDarkenTheesholdHi
-                           ? aDarken(c1, 1d - (((itf - (1d - aDarkenTheesholdHi))) / aDarkenTheesholdHi))
-                           : c1;
-                    return c2;
-                });
-
+                var aColorAlgorithmInput = new CColorAlgorithmInput(aParametersSnapshot);
+                var aColorAlgorithmEnum = aParametersSnapshot.Get<CColorAlgorithmEnum>(CParameterEnum.ColorAlgorithm);
+                var aColorAlgorithm = CTypeAttribute.GetByEnum(aColorAlgorithmEnum).DataType.New<CColorAlgorithm>(aColorAlgorithmInput);
                 var aPixelAlgoEnum = aParametersSnapshot.Get<CPixelAlgorithmEnum>(CParameterEnum.PixelAlgorithm1);
+                var aGetColor = new Func<double, Color>(d => aColorAlgorithm.GetColor(d));
                 var aPixelAlgorithmInput = new CPixelAlgorithmInput(aSizePxl, aSizeMnd, aParametersSnapshot, aGetColor);
-                var aPixelAlgorithm = CDataTypeAttribute.GetByEnum(aPixelAlgoEnum).DataType.New<CPixelAlgorithm>(aPixelAlgorithmInput);
+                var aPixelAlgorithm = CTypeAttribute.GetByEnum(aPixelAlgoEnum).DataType.New<CPixelAlgorithm>(aPixelAlgorithmInput);
                 foreach (var aPixelCoord in aPixelCoords)
                 {
                     var aPixelIdx = aPixelCoord.Item2 * aDx + aPixelCoord.Item1;
