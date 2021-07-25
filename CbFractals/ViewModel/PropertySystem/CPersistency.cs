@@ -86,7 +86,7 @@ namespace CbFractals.ViewModel.PropertySystem
 
         private static void FillXmlValues(CValueNode aValueNode, List<CNameEnum> aPath, List<CXmlValueBase> aXmlValues)
         {
-            aPath.Add(aValueNode.Name);
+            aPath.Add(aValueNode.NameEnum);
             try
             {
                 var aSelectedValueSource = aValueNode.ValueSource;
@@ -96,7 +96,7 @@ namespace CbFractals.ViewModel.PropertySystem
                     {
                         Path = GetPersistentPath(aPath),
                         Comment = GetComment(aPath),
-                        Value = aSelectedValueSource.Name.GetGuidAttribute().Guid.ToString()
+                        Value = aSelectedValueSource.NameEnum.GetGuidAttribute().Guid.ToString()
                     };
                     aXmlValues.Add(aXmlSelectedValueSource);
                 }

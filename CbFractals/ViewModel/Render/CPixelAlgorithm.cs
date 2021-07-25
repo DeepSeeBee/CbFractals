@@ -12,20 +12,31 @@ namespace CbFractals.ViewModel.Render
     using CVec4 = Tuple<double, double, double, double>;
     using CVec2Int = Tuple<int, int>;
 
+    internal enum CPixelAlgorithmEnum
+    {
+        [CDataType(typeof(CClassicMandelbrotSetPixelAlgorithm))]
+        MandelbrotClassicSet,
+
+        [CDataType(typeof(CSingleJuliaMandelbrotSetPixelAlgorithm))]
+        MandelbrotJuliaSingle,
+
+        [CDataType(typeof(CMultiJuliaMandelbrotSetPixelAlgorithm))]
+        MandelbrotJuliaMulti,
+    }
     internal struct CPixelAlgorithmInput
     {
         internal CPixelAlgorithmInput(CVec2 aSizePxl, CVec4 aSizeMnd, CParameterSnapshot aParameterSnapshot, Func<double, Color> aGetColorFunc)
         {
-            this.Item1 = aSizePxl;
-            this.Item2 = aSizeMnd;
-            this.Item3 = aParameterSnapshot;
-            this.Item4 = aGetColorFunc;
+            this.SizePxl = aSizePxl;
+            this.SizeMnd = aSizeMnd;
+            this.ParameterSnapshot = aParameterSnapshot;
+            this.GetColorFunc = aGetColorFunc;
         }
 
-        internal readonly CVec2 Item1; // SizePxl;
-        internal readonly CVec4 Item2; // SizeMnd;
-        internal readonly CParameterSnapshot Item3; // ParameterSnapshot;
-        internal Func<double, Color> Item4; // GetColorFunc;
+        internal readonly CVec2 SizePxl;
+        internal readonly CVec4 SizeMnd;
+        internal readonly CParameterSnapshot ParameterSnapshot;
+        internal Func<double, Color> GetColorFunc;
 
     }
 
@@ -33,7 +44,8 @@ namespace CbFractals.ViewModel.Render
     {
         internal CPixelAlgorithm(CPixelAlgorithmInput aInput)
         {
-            var aParameters = aInput.Item3;
+            this.PixelAlgorithmInput = aInput;
+            var aParameters = aInput.ParameterSnapshot;
             var aZoom1 = aParameters.Get<double>(CParameterEnum.Zoom);
             var aZoom2 = 1d / aZoom1;
             var aCenterX = aParameters.Get<double>(CParameterEnum.CenterX);
@@ -45,17 +57,15 @@ namespace CbFractals.ViewModel.Render
             var aSizeMnd2 = aSizeMnd1.GetRectAllignedAtCenter(aSizeMnd1Center2);
             var aSizeMnd3 = aSizeMnd2.Zoom(aZoom2);
             var aSizeMnd = aSizeMnd3;
-            this.SizePxl = aInput.Item1;
             this.SizeMnd = aSizeMnd;
-            this.Parameters = aInput.Item3;
-            this.GetColor = aInput.Item4;
         }
         internal abstract Color RenderPixel(int aX, int aY);
 
-        internal readonly CVec2 SizePxl;
+        internal readonly CPixelAlgorithmInput PixelAlgorithmInput;
+        internal CVec2 SizePxl => this.PixelAlgorithmInput.SizePxl;
         internal readonly CVec4 SizeMnd;
-        internal readonly CParameterSnapshot Parameters;
-        internal readonly Func<double, Color> GetColor;
+        internal CParameterSnapshot Parameters => this.PixelAlgorithmInput.ParameterSnapshot;
+        internal Func<double, Color> GetColor => this.PixelAlgorithmInput.GetColorFunc;
 
         internal CVec2 GetMandelPos(CVec2Int aPixelCoord)
         {

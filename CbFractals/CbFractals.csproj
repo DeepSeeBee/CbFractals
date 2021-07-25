@@ -9,7 +9,6 @@
 
   <ItemGroup>
     <Folder Include="DefaultSettings\" />
-    <Folder Include="Docu\ClassDiagrams\" />
   </ItemGroup>
 
 </Project>

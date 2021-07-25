@@ -49,7 +49,7 @@
                                     </ListBox>
                                 </GroupBox>
                                 <GroupBox Header="{Binding VmName}" DataContext="{Binding VmValueSource}">
-                                    <psysgui:CValueSourceGui/>
+                                    <psysgui:CValueNodeGui/>
                                 </GroupBox>
                             </StackPanel>
                         </ControlTemplate>
@@ -73,7 +73,7 @@
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate>
-                            <psysgui:CValueSourceGui DataContext="{Binding VmCurrentValue}"/>
+                            <psysgui:CValueNodeGui DataContext="{Binding VmCurrentValue}"/>
                         </ControlTemplate>
                     </Setter.Value>
                 </Setter>
@@ -82,7 +82,7 @@
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate>
-                            <psysgui:CValueSourceGui DataContext="{Binding VmInputParameters}"/>
+                            <psysgui:CValueNodeGui DataContext="{Binding VmInputParameters}"/>
                         </ControlTemplate>
                     </Setter.Value>
                 </Setter>
@@ -91,7 +91,7 @@
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate>
-                            <psysgui:CValueSourceGui DataContext="{Binding VmParameterRef}"/>
+                            <psysgui:CValueNodeGui DataContext="{Binding VmParameterRef}"/>
                         </ControlTemplate>
                     </Setter.Value>
                 </Setter>

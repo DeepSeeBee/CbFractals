@@ -1,0 +1,59 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Comment CommentText="The system works with TimePosition / FramePosition and BeatPosition. They can be converted into each other.">
+    <Position X="2.229" Y="4.49" Height="0.51" Width="4.992" />
+  </Comment>
+  <Comment CommentText="CParameters contains rules of how parameters change over time">
+    <Position X="5.479" Y="2.375" Height="0.51" Width="4.992" />
+  </Comment>
+  <Comment CommentText="StateMachine for the Thread control.">
+    <Position X="9.017" Y="0.583" Height="0.582" Width="2.049" />
+  </Comment>
+  <Class Name="CbFractals.ViewModel.SceneManager.CProgressionManager" Collapsed="true">
+    <Position X="3.25" Y="1" Width="4" />
+    <TypeIdentifier>
+      <HashCode>AgAAACAACAAgAgEAAAAEEACAAACAABAAIIAAAAAAAAE=</HashCode>
+      <FileName>ViewModel\SceneManager\CProgressionManager.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="Parameters" />
+      <Property Name="MandelbrotState" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="CbFractals.ViewModel.Mandelbrot.CMandelbrotState" Collapsed="true">
+    <Position X="10.75" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>GAwZgA0BRMEABMEEtAmEGigN40DEMsKYAUJgAEAwOxE=</HashCode>
+      <FileName>ViewModel\Render\CRenderState.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CbFractals.ViewModel.PropertySystem.CParameters" Collapsed="true">
+    <Position X="8.75" Y="3" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACQAAAAAIAAAABACIAoAIQCAAAQwgAAAIAAQAAMAAQ=</HashCode>
+      <FileName>ViewModel\PropertySystem\CParameters.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Struct Name="CbFractals.ViewModel.SceneManager.CTimePosition" Collapsed="true">
+    <Position X="2.25" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAEAAAAAAIAAAAAAAAAAAAAACAAAAAAAAAQAAAAAAAA=</HashCode>
+      <FileName>ViewModel\SceneManager\CPosition.cs</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="CbFractals.ViewModel.SceneManager.CFramePosition" Collapsed="true">
+    <Position X="4" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAQAAABQAAAAAAAAAA=</HashCode>
+      <FileName>ViewModel\SceneManager\CPosition.cs</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="CbFractals.ViewModel.SceneManager.CBeatPosition" Collapsed="true">
+    <Position X="5.75" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAQAAAAAAAAAAAAAAAABAAAAAAAAAAA=</HashCode>
+      <FileName>ViewModel\SceneManager\CPosition.cs</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

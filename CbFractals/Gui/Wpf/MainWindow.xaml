@@ -169,21 +169,21 @@
                                                 <GridViewColumn Header="Min">
                                                     <GridViewColumn.CellTemplate>
                                                         <DataTemplate>
-                                                            <psysgui:CValueSourceGui MinWidth="50" DataContext="{Binding VmMin}"/>
+                                                            <psysgui:CValueNodeGui MinWidth="50" DataContext="{Binding VmMin}"/>
                                                         </DataTemplate>
                                                     </GridViewColumn.CellTemplate>
                                                 </GridViewColumn>
                                                 <GridViewColumn Header="Max">
                                                     <GridViewColumn.CellTemplate>
                                                         <DataTemplate>
-                                                            <psysgui:CValueSourceGui MinWidth="50" DataContext="{Binding VmMax}"/>
+                                                            <psysgui:CValueNodeGui MinWidth="50" DataContext="{Binding VmMax}"/>
                                                         </DataTemplate>
                                                     </GridViewColumn.CellTemplate>
                                                 </GridViewColumn>
                                                 <GridViewColumn Header="Actual">
                                                     <GridViewColumn.CellTemplate>
                                                         <DataTemplate>
-                                                            <psysgui:CValueSourceGui MinWidth="50" DataContext="{Binding VmCurrentValue}"/>
+                                                            <psysgui:CValueNodeGui MinWidth="50" DataContext="{Binding VmCurrentValue}"/>
                                                         </DataTemplate>
                                                     </GridViewColumn.CellTemplate>
                                                 </GridViewColumn>
@@ -215,8 +215,8 @@
                                         </ListBox>
                                     </GroupBox>
                                     <GroupBox Header="{Binding VmName}" DataContext="{Binding VmProgression}">
-                                        <psysgui:CValueSourceGui>
-                                        </psysgui:CValueSourceGui>
+                                        <psysgui:CValueNodeGui>
+                                        </psysgui:CValueNodeGui>
                                     </GroupBox>
                                     <!--<Control Style="{DynamicResource ValueSourceControlStyle}" DataContext="{Binding VmProgression}">
                                                 

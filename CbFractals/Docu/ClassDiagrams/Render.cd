@@ -1,0 +1,229 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Comment CommentText="Soon obsolete:">
+    <Position X="3.311" Y="11.407" Height="0.401" Width="2.151" />
+  </Comment>
+  <Comment CommentText="Soon obsolete:">
+    <Position X="3.154" Y="12.791" Height="0.401" Width="2.151" />
+  </Comment>
+  <Comment CommentText="PixelAlgorithm Type linked to Enum using CDataTypeAttribute">
+    <Position X="12.893" Y="1.322" Height="0.397" Width="4.307" />
+  </Comment>
+  <Comment CommentText="ParameterSnapshot contains values of CParameters for render thread.">
+    <Position X="15.181" Y="2.488" Height="0.582" Width="2.049" />
+  </Comment>
+  <Comment CommentText="SizeMnd is the size of the mandel set in mandel coordinates.. ">
+    <Position X="15.766" Y="3.872" Height="0.582" Width="2.049" />
+  </Comment>
+  <Comment CommentText="SizePxlis the size of the image in pixel coordinates.">
+    <Position X="15.856" Y="6.04" Height="0.582" Width="2.049" />
+  </Comment>
+  <Comment CommentText="StateMachine for the Thread control.">
+    <Position X="4.08" Y="0.5" Height="0.582" Width="2.049" />
+  </Comment>
+  <Class Name="CbFractals.ViewModel.Render.CPixelAlgorithm" Collapsed="true">
+    <Position X="9.5" Y="2.5" Width="2" />
+    <Members>
+      <Property Name="Parameters" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAgAAEBAAAAAAACYAIAAAAAAAAA=</HashCode>
+      <FileName>ViewModel\Render\CPixelAlgorithm.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="PixelAlgorithmInput" />
+      <Property Name="Parameters" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="CbFractals.ViewModel.Mandelbrot.CMainWindowLoadedState" Collapsed="true">
+    <Position X="3.25" Y="2" Width="2.25" />
+    <InheritanceLine Type="CbFractals.ViewModel.Mandelbrot.CMandelbrotState" FixedToPoint="true">
+      <Path>
+        <Point X="3" Y="1.191" />
+        <Point X="3" Y="2.438" />
+        <Point X="3.25" Y="2.438" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAEAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ViewModel\Render\CRenderState.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CbFractals.ViewModel.Mandelbrot.CEndRenderFrameState" Collapsed="true">
+    <Position X="3.25" Y="4" Width="2.5" />
+    <InheritanceLine Type="CbFractals.ViewModel.Mandelbrot.CMandelbrotState" FixedToPoint="true">
+      <Path>
+        <Point X="3" Y="1.191" />
+        <Point X="3" Y="4.375" />
+        <Point X="3.25" Y="4.375" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAEABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ViewModel\Render\CRenderState.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CbFractals.ViewModel.Mandelbrot.CMoveState" Collapsed="true">
+    <Position X="3.25" Y="13.25" Width="1.5" />
+    <InheritanceLine Type="CbFractals.ViewModel.Mandelbrot.CMandelbrotState" FixedToPoint="true">
+      <Path>
+        <Point X="3" Y="1.191" />
+        <Point X="3" Y="13.562" />
+        <Point X="3.25" Y="13.562" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ViewModel\Render\CRenderState.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CbFractals.ViewModel.Mandelbrot.CBeginRenderFrameState" Collapsed="true">
+    <Position X="3.25" Y="3" Width="2.5" />
+    <InheritanceLine Type="CbFractals.ViewModel.Mandelbrot.CMandelbrotState" FixedToPoint="true">
+      <Path>
+        <Point X="3" Y="1.191" />
+        <Point X="3" Y="3.438" />
+        <Point X="3.25" Y="3.438" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>gAAAAAAAAAEAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAA=</HashCode>
+      <FileName>ViewModel\Render\CRenderState.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CbFractals.ViewModel.Mandelbrot.CZoomState" Collapsed="true">
+    <Position X="3.25" Y="12" Width="3.75" />
+    <InheritanceLine Type="CbFractals.ViewModel.Mandelbrot.CMandelbrotState" FixedToPoint="true">
+      <Path>
+        <Point X="3" Y="1.191" />
+        <Point X="3" Y="12.5" />
+        <Point X="3.25" Y="12.5" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ViewModel\Render\CRenderState.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CbFractals.ViewModel.Mandelbrot.CBeginRenderMovieState" Collapsed="true">
+    <Position X="3.25" Y="5.25" Width="2.25" />
+    <InheritanceLine Type="CbFractals.ViewModel.Mandelbrot.CMandelbrotState" FixedToPoint="true">
+      <Path>
+        <Point X="3" Y="1.191" />
+        <Point X="3" Y="5.562" />
+        <Point X="3.25" Y="5.562" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ViewModel\Render\CRenderState.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CbFractals.ViewModel.Mandelbrot.CEndRenderMovieState" Collapsed="true">
+    <Position X="3.25" Y="9.75" Width="2.5" />
+    <InheritanceLine Type="CbFractals.ViewModel.Mandelbrot.CMandelbrotState" FixedToPoint="true">
+      <Path>
+        <Point X="3" Y="1.191" />
+        <Point X="3" Y="10.125" />
+        <Point X="3.25" Y="10.125" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ViewModel\Render\CRenderState.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CbFractals.ViewModel.Mandelbrot.CBeginCancelRenderMovieState" Collapsed="true">
+    <Position X="3.25" Y="7.5" Width="3" />
+    <InheritanceLine Type="CbFractals.ViewModel.Mandelbrot.CMandelbrotState" FixedToPoint="true">
+      <Path>
+        <Point X="3" Y="1.191" />
+        <Point X="3" Y="7.875" />
+        <Point X="3.25" Y="7.875" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ViewModel\Render\CRenderState.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CbFractals.ViewModel.Mandelbrot.CEndCancelRenderMovieState" Collapsed="true">
+    <Position X="3.25" Y="8.5" Width="2.75" />
+    <InheritanceLine Type="CbFractals.ViewModel.Mandelbrot.CMandelbrotState" FixedToPoint="true">
+      <Path>
+        <Point X="3" Y="1.191" />
+        <Point X="3" Y="8.938" />
+        <Point X="3.25" Y="8.938" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ViewModel\Render\CRenderState.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CbFractals.ViewModel.Mandelbrot.CNextFrameState" Collapsed="true">
+    <Position X="3.25" Y="6.25" Width="2.5" />
+    <InheritanceLine Type="CbFractals.ViewModel.Mandelbrot.CMandelbrotState" FixedToPoint="true">
+      <Path>
+        <Point X="3" Y="1.191" />
+        <Point X="3" Y="6.5" />
+        <Point X="3.25" Y="6.5" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ViewModel\Render\CRenderState.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CbFractals.ViewModel.Mandelbrot.CMandelbrotState" Collapsed="true">
+    <Position X="2.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>GAwZgA0BRMEABMEEtAmEGigN40DEMsKYAUJgAEAwOxE=</HashCode>
+      <FileName>ViewModel\Render\CRenderState.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CbFractals.ViewModel.PropertySystem.CDataTypeAttribute" Collapsed="true">
+    <Position X="15.25" Y="0.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAg=</HashCode>
+      <FileName>ViewModel\PropertySystem\CConstant.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CbFractals.ViewModel.PropertySystem.CParameterSnapshot" Collapsed="true">
+    <Position X="13" Y="2.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAABACAAAAAAAAAAAAAAAAAAgAAAAAAA=</HashCode>
+      <FileName>ViewModel\PropertySystem\CParameters.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="System.Tuple&lt;T1, T2, T3, T4&gt;" Collapsed="true">
+    <Position X="18" Y="4.5" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="System.Tuple&lt;T1, T2&gt;" Collapsed="true">
+    <Position X="18" Y="6.75" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" />
+  </Class>
+  <Struct Name="CbFractals.ViewModel.Render.CPixelAlgorithmInput">
+    <Position X="13" Y="4.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAABAAAAIAAgAAAAAAAAAAAAQAAAAAAAAAAA=</HashCode>
+      <FileName>ViewModel\Render\CPixelAlgorithm.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="ParameterSnapshot" />
+      <Field Name="SizeMnd" />
+      <Field Name="SizePxl" />
+    </ShowAsAssociation>
+  </Struct>
+  <Enum Name="CbFractals.ViewModel.Render.CPixelAlgorithmEnum" Collapsed="true">
+    <Position X="12.75" Y="0.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAgAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAg=</HashCode>
+      <FileName>ViewModel\Render\CPixelAlgorithm.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

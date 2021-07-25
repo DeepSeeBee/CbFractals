@@ -1,4 +1,5 @@
 ﻿using CbFractals.Tools;
+using CbFractals.ViewModel.Render;
 using CbFractals.ViewModel.SceneManager; // TODO-abstrahieren?
 using System;
 using System.Collections.Generic;
@@ -295,12 +296,12 @@ namespace CbFractals.ViewModel.PropertySystem
             this[CParameterEnum.FrameIndex].Min.SetEditable(false);
             this[CParameterEnum.FrameIndex].Max.SetEditable(false);
             this[CParameterEnum.FrameIndex].SetEditable(false);
-            this[CParameterEnum.JuliaPartReal].As<CParameter<double>>().Min.Value = -4.3d;
-            this[CParameterEnum.JuliaPartReal].As<CParameter<double>>().MaxConstant.Value = 3;
+            this[CParameterEnum.JuliaPartReal].As<CNumericParameter<double>>().Min.Value = -4.3d;
+            this[CParameterEnum.JuliaPartReal].As<CNumericParameter<double>>().MaxConstant.Value = 3;
             this[CParameterEnum.JuliaPartReal].SetConst<double>(0.446d); // -0.68
             this[CParameterEnum.JuliaPartReal].SetMappedProgression(0.43d, 0.47d);
-            this[CParameterEnum.JuliaPartImaginary].As<CParameter<double>>().Min.Value = 0.3d;
-            this[CParameterEnum.JuliaPartImaginary].As<CParameter<double>>().MaxConstant.Value = 0.1d;
+            this[CParameterEnum.JuliaPartImaginary].As<CNumericParameter<double>>().Min.Value = 0.3d;
+            this[CParameterEnum.JuliaPartImaginary].As<CNumericParameter<double>>().MaxConstant.Value = 0.1d;
             this[CParameterEnum.JuliaPartImaginary].SetConst<double>(0.24d);
             this[CParameterEnum.JuliaPartImaginary].SetMappedProgression(0.23d, 0.26d);
             this[CParameterEnum.Zoom].SetConst<double>(1d, 1, 2.5d);

@@ -24,7 +24,7 @@ namespace CbFractals.ViewModel.PropertySystem
         internal CValueNode(CProgressionManager aParentProgressionManager, CNameEnum aName)
         {
             this.ParentProgressionManager = aParentProgressionManager;
-            this.Name = aName;
+            this.NameEnum = aName;
         }
         internal readonly CProgressionManager ParentProgressionManager;
 
@@ -33,8 +33,8 @@ namespace CbFractals.ViewModel.PropertySystem
         internal const CNameEnum Name_Min = CNameEnum.Min;
         internal const CNameEnum Name_Constant = CNameEnum.Constant;
         internal const CNameEnum Name_MappedProgression = CNameEnum.MappedProgression;
-        internal readonly CNameEnum Name;
-        public string VmName => this.Name.ToString().TryTrimStart("Parameter_"); // TODO-Hack
+        internal readonly CNameEnum NameEnum;
+        public string VmName => this.NameEnum.ToString().TryTrimStart("Parameter_"); // TODO-Hack
         #endregion
         #region Value
         //internal abstract void SetTypelessValue(object v);
@@ -129,7 +129,7 @@ namespace CbFractals.ViewModel.PropertySystem
         }
         internal bool Selectable = true;
         public bool VmSelectable => this.Selectable;
-        public override string ToString() => this.Name.ToString();
+        public override string ToString() => this.NameEnum.ToString();
         internal void SetValueSource(CParameterEnum p)
             => this.ValueSource = this.ParentProgressionManager.Parameters[p];
     }

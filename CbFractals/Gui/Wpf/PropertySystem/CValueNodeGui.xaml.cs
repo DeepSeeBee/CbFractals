@@ -14,11 +14,11 @@ using System.Windows.Shapes;
 namespace CbFractals.Gui.Wpf.PropertySystem
 {
     /// <summary>
-    /// Interaktionslogik für CValueSourceGui.xaml
+    /// Interaktionslogik für CValueNodeGui.xaml
     /// </summary>
-    public partial class CValueSourceGui : UserControl
+    public partial class CValueNodeGui : UserControl
     {
-        public CValueSourceGui()
+        public CValueNodeGui()
         {
             InitializeComponent();
         }

@@ -19,7 +19,7 @@ namespace CbFractals.Tools
         internal static CNameEnum GetNameEnum(this Enum aEnum)
             => aEnum.GetNameAttribute().NameEnum;
         internal static T Find<T>(this IEnumerable<T> vns, CNameEnum n) where T : CValueNode
-            => vns.Where(vn => vn.Name == n).Single();
+            => vns.Where(vn => vn.NameEnum == n).Single();
     }
 
 }

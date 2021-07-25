@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="CbFractals.ViewModel.Mandelbrot.CColorDetector" Collapsed="true">
+    <Position X="2.25" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIAEAAAjAAIAAIAAAAABIAAAAACAACAAAAQAAAQAEA=</HashCode>
+      <FileName>ViewModel\Mandelbrot\CMandelbrot.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CbFractals.ViewModel.Mandelbrot.CClassicMandelbrotSetPixelAlgorithm" Collapsed="true">
+    <Position X="1.75" Y="2.5" Width="3" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ViewModel\Mandelbrot\CMandelbrot.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CbFractals.ViewModel.Mandelbrot.CSingleJuliaMandelbrotSetPixelAlgorithm" Collapsed="true">
+    <Position X="8.25" Y="2.5" Width="3" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAEAAAAAAQAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ViewModel\Mandelbrot\CMandelbrot.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CbFractals.ViewModel.Mandelbrot.CMultiJuliaMandelbrotSetPixelAlgorithm" Collapsed="true">
+    <Position X="5" Y="2.5" Width="3" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ViewModel\Mandelbrot\CMandelbrot.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CbFractals.ViewModel.Render.CPixelAlgorithm" Collapsed="true">
+    <Position X="5.75" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAgAAEBAAAAAAACQAIAAAAAAAAA=</HashCode>
+      <FileName>ViewModel\Render\CPixelAlgorithm.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Struct Name="CbFractals.ViewModel.Render.CPixelAlgorithmInput" Collapsed="true">
+    <Position X="10.75" Y="4" Width="3" />
+    <TypeIdentifier>
+      <HashCode>AAABAAAAAIBAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ViewModel\Render\CPixelAlgorithm.cs</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Enum Name="CbFractals.ViewModel.Mandelbrot.CBaseColorEnum" Collapsed="true">
+    <Position X="5.25" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAABAAAAA=</HashCode>
+      <FileName>ViewModel\Mandelbrot\CMandelbrot.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="CbFractals.ViewModel.Render.CPixelAlgorithmEnum" Collapsed="true">
+    <Position X="10.75" Y="5.25" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AAgAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAg=</HashCode>
+      <FileName>ViewModel\Render\CPixelAlgorithm.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

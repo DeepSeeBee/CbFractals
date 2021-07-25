@@ -1,4 +1,5 @@
 ﻿using CbFractals.Tools;
+using CbFractals.ViewModel.Render;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -176,9 +177,9 @@ namespace CbFractals.ViewModel.PropertySystem
         }
     }
 
-    public abstract class CParameter<T> : CParameter
+    public abstract class CNumericParameter<T> : CParameter
     {
-        internal CParameter(CParameters aParentParameters, CParameterEnum aParameterEnum)
+        internal CNumericParameter(CParameters aParentParameters, CParameterEnum aParameterEnum)
         : base(aParentParameters, aParameterEnum)
         {
         }
@@ -201,7 +202,7 @@ namespace CbFractals.ViewModel.PropertySystem
         internal override object ConverTo(object aValue) => aValue is T ? (T)aValue : Enum.Parse(typeof(T), aValue.ToString());
     }
 
-    public sealed class CInt64Parameter : CParameter<Int64>
+    public sealed class CInt64Parameter : CNumericParameter<Int64>
     {
         public CInt64Parameter(CParameters aParentParameters, CParameterEnum aParameterEnum) : base(aParentParameters, aParameterEnum)
         {
@@ -209,7 +210,7 @@ namespace CbFractals.ViewModel.PropertySystem
         internal override CConstant NewConstant(CValueNode aParentValueNode, CNameEnum aName) => new CInt64Constant(aParentValueNode, aName);
         internal override object ConverTo(object aValue) => Convert.ToInt64(aValue);
     }
-    public sealed class CDoubleParameter : CParameter<double>
+    public sealed class CDoubleParameter : CNumericParameter<double>
     {
         public CDoubleParameter(CParameters aParentParameters, CParameterEnum aParameterEnum) : base(aParentParameters, aParameterEnum)
         {
@@ -246,15 +247,18 @@ namespace CbFractals.ViewModel.PropertySystem
         }
     }
 
-    internal sealed class CParameterClassRegistry : Dictionary<Type, Type>
+    internal sealed class CParameterClassRegistry 
     {
         private CParameterClassRegistry()
         {
-            this.Add(typeof(Int64), typeof(CInt64Parameter));
-            this.Add(typeof(double), typeof(CDoubleParameter));
-            this.Add(typeof(CPixelAlgorithmEnum), typeof(CPixelAlgorithmEnumParameter));
+            this.Dic.Add(typeof(Int64), typeof(CInt64Parameter));
+            this.Dic.Add(typeof(double), typeof(CDoubleParameter));
+            this.Dic.Add(typeof(CPixelAlgorithmEnum), typeof(CPixelAlgorithmEnumParameter));
         }
         internal static readonly CParameterClassRegistry Singleton = new CParameterClassRegistry();
+        private readonly Dictionary<Type, Type> Dic = new Dictionary<Type, Type>();
+        internal Type this[Type aType] => this.Dic[aType];
+
     }
 
 }

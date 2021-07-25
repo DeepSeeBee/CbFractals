@@ -1,5 +1,6 @@
 ﻿using CbFractals.Tools;
 using CbFractals.ViewModel.Mandelbrot;
+using CbFractals.ViewModel.Render;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -150,17 +151,6 @@ namespace CbFractals.ViewModel.PropertySystem
 
     }
 
-    internal enum CPixelAlgorithmEnum
-    {
-        [CDataType(typeof(CClassicMandelbrotSetPixelAlgorithm))]
-        MandelbrotClassicSet,
-
-        [CDataType(typeof(CSingleJuliaMandelbrotSetPixelAlgorithm))]
-        MandelbrotJuliaSingle,
-
-        [CDataType(typeof(CMultiJuliaMandelbrotSetPixelAlgorithm))]
-        MandelbrotJuliaMulti,
-    }
     internal sealed class CPixelAlgorithmEnumConstant : CEnumConstant<CPixelAlgorithmEnum>
     {
         public CPixelAlgorithmEnumConstant(CValueNode aParentValueSource, CNameEnum aName) : base(aParentValueSource, aName)
