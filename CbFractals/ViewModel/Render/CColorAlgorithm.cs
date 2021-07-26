@@ -33,7 +33,7 @@ namespace CbFractals.ViewModel.Render
 
     internal sealed class CColorAlgorithmEnumParameter : CEnumParameter<CColorAlgorithmEnum>
     {
-        public CColorAlgorithmEnumParameter(CParameters aParentParameters, CParameterEnum aParameterEnum) : base(aParentParameters, aParameterEnum)
+        public CColorAlgorithmEnumParameter(CParameters aParentParameters, CNameEnum aNameEnum) : base(aParentParameters, aNameEnum)
         {
         }
         internal override CConstant NewConstant(CValueNode aParentValueNode, CNameEnum aName)

@@ -16,7 +16,10 @@ namespace CbFractals.ViewModel.PropertySystem
         Enum,
         ParameterCurrentValue,
         Func,
-        InputParameter,
+        Parameter,
+        Parameters,
+        FuncParameter,
+        //   Parameters,
     }
 
     public abstract class CValueNode : CViewModel
@@ -26,6 +29,13 @@ namespace CbFractals.ViewModel.PropertySystem
             this.ParentProgressionManager = aParentProgressionManager;
             this.NameEnum = aName;
         }
+        internal CValueNode(CValueNode aParentValueNode, CProgressionManager aParentProgressionManager, CNameEnum aNameEnum)
+            :this(aParentValueNode.ParentProgressionManager, aNameEnum)
+        {
+            this.ParentValueNodeNullable = aParentValueNode;
+        }
+        internal readonly CValueNode ParentValueNodeNullable;
+        internal IEnumerable<CValueNode> Path => this.ParentValueNodeNullable is object ? this.ParentValueNodeNullable.Path.Concat(new CValueNode[] { this }) : new CValueNode[] { this };
         internal readonly CProgressionManager ParentProgressionManager;
 
         #region Name
@@ -137,7 +147,7 @@ namespace CbFractals.ViewModel.PropertySystem
     internal sealed class CParameterRef : CValueNode
     {
         #region ctor
-        internal CParameterRef(CValueNode aParentValueNode, CNameEnum aName) : base(aParentValueNode.ParentProgressionManager, aName)
+        internal CParameterRef(CValueNode aParentValueNode, CNameEnum aName) : base(aParentValueNode, aParentValueNode.ParentProgressionManager, aName)
         {
         }
         #endregion

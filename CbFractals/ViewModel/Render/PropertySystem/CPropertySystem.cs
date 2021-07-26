@@ -13,7 +13,7 @@ namespace CbFractals.ViewModel.Render.PropertySystem
     }
     internal sealed class CPixelAlgorithmEnumParameter : CEnumParameter<CPixelAlgorithmEnum>
     {
-        public CPixelAlgorithmEnumParameter(CParameters aParentParameters, CParameterEnum aParameterEnum) : base(aParentParameters, aParameterEnum)
+        public CPixelAlgorithmEnumParameter(CParameters aParentParameters, CNameEnum aNameEnum) : base(aParentParameters, aNameEnum)
         {
         }
         internal override CConstant NewConstant(CValueNode aParentValueNode, CNameEnum aName)

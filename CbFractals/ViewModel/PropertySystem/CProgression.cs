@@ -7,10 +7,11 @@ using System.Text;
 
 namespace CbFractals.ViewModel.PropertySystem
 {
+    using CParameterDeclaration = Tuple<CNameEnum, Type>;
     public abstract class CProgression : CValueNode
     {
         #region ctor
-        internal CProgression(CValueNode aParentValueNode, CNameEnum aName) : base(aParentValueNode.ParentProgressionManager, aName)
+        internal CProgression(CValueNode aParentValueNode, CNameEnum aName) : base(aParentValueNode, aParentValueNode.ParentProgressionManager, aName)
         {
             this.ParentValueNode = aParentValueNode;
         }
@@ -107,44 +108,52 @@ namespace CbFractals.ViewModel.PropertySystem
         }
     }
 
-    internal sealed class CInputParameter : CValueNode
+    internal sealed class CFuncParameter : CValueNode
     {
         #region ctor
-        internal CInputParameter(CValueNode aParentValueNode, CNameEnum aName) : base(aParentValueNode.ParentProgressionManager, aName)
+        internal CFuncParameter(CValueNode aParentValueNode, CParameterDeclaration aParameterDeclaration) : base(aParentValueNode, aParentValueNode.ParentProgressionManager, aParameterDeclaration.Item1)
         {
-
+            this.ParameterType = aParameterDeclaration.Item2;
         }
         #endregion
+        private readonly Type ParameterType;
         #region ParameterRef
-        private CParameterRef ParameterRefM;
-        internal CParameterRef ParameterRef => CLazyLoad.Get(ref this.ParameterRefM, () => new CParameterRef(this, CNameEnum.ParameterRef));
-        public CParameterRef VmParameterRef => this.ParameterRef;
+        private CParameter NewParameter()
+        {
+            var aParameter = CParameter.New(this, this.ParameterType, this.NameEnum);
+            aParameter.FuncProgression.SetSelectable(false);
+            aParameter.SetMapToRange(false);
+            return aParameter;
+        }
+        private CParameter ParameterM;
+        internal CParameter Parameter => CLazyLoad.Get(ref this.ParameterM, () => this.NewParameter());
+        public CParameter VmParameter => this.Parameter;
         internal override IEnumerable<CValueNode> SubValueNodes 
         {
             get
             {
                 foreach (var aValueSource in base.SubValueNodes)
                     yield return aValueSource;
-                yield return this.ParameterRef;
+                yield return this.Parameter;
             }
         }
         #endregion        
-        internal override object GetTypelessValue() => this.ParameterRef.GetTypelessValue();
-        internal override CValueNodeGuiEnum ValueNodeGuiEnum => CValueNodeGuiEnum.InputParameter;
+        internal override object GetTypelessValue() => this.Parameter.GetTypelessValue();
+        internal override CValueNodeGuiEnum ValueNodeGuiEnum => CValueNodeGuiEnum.FuncParameter;
     }
 
-    internal sealed class CInputParameters : CValueNode
+    internal sealed class CFuncParameters : CValueNode
     {
-        internal CInputParameters(CValueNode aParentValueNode, CNameEnum aName, params CNameEnum[] aNames) : base(aParentValueNode.ParentProgressionManager, aName)
+        internal CFuncParameters(CValueNode aParentValueNode, CNameEnum aName, params CParameterDeclaration[] aParameterDeclarations) : base(aParentValueNode, aParentValueNode.ParentProgressionManager, aName)
         {
-            this.InputParameters = aNames.Select(n => new CInputParameter(this, n)).ToArray();
+            this.InputParameters = aParameterDeclarations.Select(d => new CFuncParameter(this, d)).ToArray();
         }
         internal object[] GetParamArray()
             => this.InputParameters.Select(p => p.GetTypelessValue()).ToArray();
         internal override object GetTypelessValue()
             => this.GetParamArray();
 
-        internal readonly CInputParameter[] InputParameters;
+        internal readonly CFuncParameter[] InputParameters;
         internal override IEnumerable<CValueNode> SubValueNodes => this.InputParameters;
         internal override IEnumerable<CValueNode> ValueSources => this.InputParameters;
         internal override CValueNodeGuiEnum ValueNodeGuiEnum => CValueNodeGuiEnum.ValueSources;
@@ -157,15 +166,15 @@ namespace CbFractals.ViewModel.PropertySystem
     internal abstract class CFunc : CValueNode
     {
         #region ctor
-        internal CFunc(CValueNode aParentValueNode, CNameEnum aName) : base(aParentValueNode.ParentProgressionManager, aName)
+        internal CFunc(CValueNode aParentValueNode, CNameEnum aName) : base(aParentValueNode, aParentValueNode.ParentProgressionManager, aName)
         {
         }
         #endregion
         #region InputParameters
-        internal abstract CNameEnum[] InputParameterNames { get; }
-        private CInputParameters InputParametersM;
-        internal CInputParameters InputParameters => CLazyLoad.Get(ref this.InputParametersM, () => new CInputParameters(this, CNameEnum.InputParameters, this.InputParameterNames));
-        public CInputParameters VmInputParameters => this.InputParameters;
+        internal abstract Tuple<CNameEnum, Type>[] ParameterDeclarations { get; }
+        private CFuncParameters InputParametersM;
+        internal CFuncParameters InputParameters => CLazyLoad.Get(ref this.InputParametersM, () => new CFuncParameters(this, CNameEnum.InputParameters, this.ParameterDeclarations));
+        public CFuncParameters VmInputParameters => this.InputParameters;
         internal override IEnumerable<CValueNode> SubValueNodes => base.SubValueNodes.Concat(new CValueNode[] { this.InputParameters });
         #endregion
         #region Invoke
@@ -189,10 +198,10 @@ namespace CbFractals.ViewModel.PropertySystem
         private CNativeFunc(CValueNode aParentValueNode, 
                              CNameEnum aName,
                              CFuncImplementation aFuncImpl,
-                             CNameEnum[] aInputParameterNames
+                             CParameterDeclaration[] aParameterDeclarations
                              ): base(aParentValueNode, aName)
         {
-            this.InputParameterNamesM = aInputParameterNames;
+            this.ParameterDeclarationsM = aParameterDeclarations;
             this.FuncImplementation = aFuncImpl;
         }
         internal static CNativeFunc[] New(CValueNode aParentValueNode)
@@ -202,20 +211,20 @@ namespace CbFractals.ViewModel.PropertySystem
                 new CNativeFunc(aParentValueNode, 
                                 CNameEnum.Func_SecondsToBeatCount, 
                                 new CFuncImplementation(SecondsToBeatCount),
-                                new CNameEnum[]{ CNameEnum.Func_SecondsToBeatCount_In_Seconds }
+                                new CParameterDeclaration[]{ new CParameterDeclaration(CNameEnum.Func_SecondsToBeatCount_In_Seconds, typeof(double)) }
                                 ),
                 new CNativeFunc(aParentValueNode,
                                 CNameEnum.Func_SecondsToFrameCount,
                                 new CFuncImplementation(SecondsToFrameCount),
-                                new CNameEnum[]{ CNameEnum.Func_SecondsToFrameCount_In_Seconds }
+                                new CParameterDeclaration[]{ new CParameterDeclaration(CNameEnum.Func_SecondsToFrameCount_In_Seconds, typeof(double)) }
                                 ),
             };
             return aFuncs;
         }
         #endregion
         #region InputParameters
-        private readonly CNameEnum[] InputParameterNamesM;
-        internal override CNameEnum[] InputParameterNames => this.InputParameterNamesM;
+        private readonly CParameterDeclaration[] ParameterDeclarationsM;
+        internal override CParameterDeclaration[] ParameterDeclarations => this.ParameterDeclarationsM;
         internal T GetParam<T>(object[] aParams, int aIdx, CNameEnum aName, Func<object, T> aConvertFunc)
             => aConvertFunc(aParams[aIdx]);
         internal double GetDoubleParam(object[] aParams, int aIdx, CNameEnum aName)

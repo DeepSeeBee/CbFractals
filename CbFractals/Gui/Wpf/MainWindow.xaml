@@ -148,7 +148,12 @@
                 <Grid Grid.Row="2">
                     <DockPanel DataContext="{Binding VmProgressionManager}">
                         <StackPanel Orientation="Horizontal">
-                            <GroupBox DataContext="{Binding VmParameters}">
+                            <psysgui:CValueNodeGui DataContext="{Binding VmParameters}"/>
+
+
+
+
+                            <!--<GroupBox DataContext="{Binding VmParameters}">
                                 <GroupBox.Header>
                                     <StackPanel Orientation="Horizontal">
                                         <Menu>
@@ -218,34 +223,8 @@
                                         <psysgui:CValueNodeGui>
                                         </psysgui:CValueNodeGui>
                                     </GroupBox>
-                                    <!--<Control Style="{DynamicResource ValueSourceControlStyle}" DataContext="{Binding VmProgression}">
-                                                
-                                        </Control>-->
-                                   
-
-                                    <!--<GroupBox Header="ActiveProgression.ValueSources"
-                                              DataContext="{Binding VmProgression}">
-                                        <ListBox ItemsSource="{Binding VmValueSources}" 
-                                                 SelectedItem="{Binding VmValueSource}" >
-                                            <ListBox.ItemTemplate>
-                                                <DataTemplate>
-                                                    <TextBlock Text="{Binding VmName}"/>
-                                                </DataTemplate>
-                                            </ListBox.ItemTemplate>
-                                        </ListBox>
-                                    </GroupBox>
-                                    <GroupBox Header="ValueSource"
-                                              DataContext="{Binding VmProgression.VmValueSource}">
-
-                                        <Control>
-                                            <Control.Style>
-                                                
-                                            </Control.Style>
-                                        </Control>
-                                        
-                                    </GroupBox>-->
                                 </StackPanel>
-                            </GroupBox>
+                            </GroupBox>-->
                         </StackPanel>
                     </DockPanel>
 

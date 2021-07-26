@@ -37,7 +37,7 @@
                     <Setter.Value>
                         <ControlTemplate>
                             <StackPanel Orientation="Horizontal">
-                                <GroupBox Header="{Binding VmName}">
+                                <!--<GroupBox Header="{Binding VmName}">-->
                                     <ListBox IsEnabled="{Binding VmValueSourceEditable}" 
                                              ItemsSource="{Binding VmValueSources}" 
                                              SelectedItem="{Binding VmValueSource, Mode=TwoWay}" >
@@ -47,10 +47,10 @@
                                             </DataTemplate>
                                         </ListBox.ItemTemplate>
                                     </ListBox>
-                                </GroupBox>
-                                <GroupBox Header="{Binding VmName}" DataContext="{Binding VmValueSource}">
-                                    <psysgui:CValueNodeGui/>
-                                </GroupBox>
+                                <!--</GroupBox>-->
+                                <!--<GroupBox Header="{Binding VmName}" >-->
+                                <psysgui:CValueNodeGui DataContext="{Binding VmValueSource}"/>
+                                <!--</GroupBox>-->
                             </StackPanel>
                         </ControlTemplate>
                     </Setter.Value>
@@ -87,11 +87,113 @@
                     </Setter.Value>
                 </Setter>
             </DataTrigger>
-            <DataTrigger Binding="{Binding VmValueNodeGuiEnum}" Value="InputParameter">
+            <!--<DataTrigger Binding="{Binding VmValueNodeGuiEnum}" Value="InputParameter">
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate>
-                            <psysgui:CValueNodeGui DataContext="{Binding VmParameterRef}"/>
+                            <psysgui:CValueNodeGui DataContext="{Binding VmParameter}"/>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </DataTrigger>-->
+
+            <DataTrigger Binding="{Binding VmValueNodeGuiEnum}" Value="Parameters">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <GroupBox>
+                                    <GroupBox.Header>
+                                        <StackPanel Orientation="Horizontal">
+                                            <Menu>
+                                                <MenuItem Header="▼">
+                                                    <MenuItem Header="Save as default" >
+                                                        <!-- TODO: Click="SaveProgression" -->
+                                                    </MenuItem>
+                                                    <MenuItem Header="Show all" IsCheckable="True" IsChecked="{Binding VmShowAll, Mode=TwoWay}"/>
+                                                </MenuItem>
+                                            </Menu>
+                                            <TextBlock Text="Parameters"/>
+                                        </StackPanel>
+                                    </GroupBox.Header>
+                                    <ListView ItemsSource="{Binding VmValueSources}" SelectedItem="{Binding VmValueSource}">
+                                        <ListView.View>
+                                            <GridView>
+                                                <GridView.Columns>
+                                                    <GridViewColumn Header="Name" DisplayMemberBinding="{Binding VmName}" />
+                                                    <GridViewColumn Header="Min">
+                                                        <GridViewColumn.CellTemplate>
+                                                            <DataTemplate>
+                                                                <psysgui:CValueNodeGui MinWidth="50" DataContext="{Binding VmMin}"/>
+                                                            </DataTemplate>
+                                                        </GridViewColumn.CellTemplate>
+                                                    </GridViewColumn>
+                                                    <GridViewColumn Header="Max">
+                                                        <GridViewColumn.CellTemplate>
+                                                            <DataTemplate>
+                                                                <psysgui:CValueNodeGui MinWidth="50" DataContext="{Binding VmMax}"/>
+                                                            </DataTemplate>
+                                                        </GridViewColumn.CellTemplate>
+                                                    </GridViewColumn>
+                                                    <GridViewColumn Header="Actual">
+                                                        <GridViewColumn.CellTemplate>
+                                                            <DataTemplate>
+                                                                <psysgui:CValueNodeGui MinWidth="50" DataContext="{Binding VmCurrentValue}"/>
+                                                            </DataTemplate>
+                                                        </GridViewColumn.CellTemplate>
+                                                    </GridViewColumn>
+                                                </GridView.Columns>
+                                            </GridView>
+                                        </ListView.View>
+                                        <ListView.ItemTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding VmName}"/>
+                                            </DataTemplate>
+                                        </ListView.ItemTemplate>
+                                    </ListView>
+                                </GroupBox>
+                                <psysgui:CValueNodeGui DataContext="{Binding VmValueSource}"/>
+                            </StackPanel>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding VmValueNodeGuiEnum}" Value="Parameter">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate>
+                            <!--<GroupBox>
+                                    <GroupBox.Header>
+                                        <TextBlock>
+                                        <TextBlock Text="Parameter"/>
+                                        <TextBlock Text="{Binding VmName}"/>
+                                    </TextBlock>
+                                    </GroupBox.Header>-->
+                                    <StackPanel Orientation="Horizontal">
+                                        <GroupBox Header="ActiveProgression">
+                                            <ListBox IsEnabled="{Binding VmValueSourceEditable}" ItemsSource="{Binding VmProgressions}" SelectedItem="{Binding VmProgression}">
+                                                <ListBox.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <TextBlock Text="{Binding VmName}"/>
+                                                    </DataTemplate>
+                                                </ListBox.ItemTemplate>
+                                            </ListBox>
+                                        </GroupBox>
+                                        <GroupBox Header="{Binding VmName}" DataContext="{Binding VmProgression}">
+                                            <psysgui:CValueNodeGui>
+                                            </psysgui:CValueNodeGui>
+                                        </GroupBox>
+                                    </StackPanel>
+                                <!--</GroupBox>-->
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding VmValueNodeGuiEnum}" Value="FuncParameter">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate>
+                            <psysgui:CValueNodeGui DataContext="{Binding VmParameter}"/>
                         </ControlTemplate>
                     </Setter.Value>
                 </Setter>

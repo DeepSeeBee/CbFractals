@@ -276,7 +276,7 @@ namespace CbFractals.ViewModel.PropertySystem
         {
             var aParameterCount = (int)CParameterEnum._Count;
             var aParameters = (from aIdx in Enumerable.Range(0, aParameterCount)
-                               select CTypeAttribute.GetByEnum((CParameterEnum)aIdx).NewParameter(this, (CParameterEnum)aIdx)).ToArray();
+                               select CTypeAttribute.GetByEnum((CParameterEnum)aIdx).NewParameter(this, ((CParameterEnum)aIdx).GetNameEnum())).ToArray();
             this.Parameters = aParameters;
         }
         internal override void Build()
@@ -452,7 +452,9 @@ namespace CbFractals.ViewModel.PropertySystem
         }
         internal override IEnumerable<CValueNode> SubValueNodes => this.Parameters;
         internal override bool ValueSourceSetRecalculates => false;
-
+        #region Gui
+        internal override CValueNodeGuiEnum ValueNodeGuiEnum => CValueNodeGuiEnum.Parameters;
+        #endregion
     }
 
     internal sealed class CParameterSnapshot

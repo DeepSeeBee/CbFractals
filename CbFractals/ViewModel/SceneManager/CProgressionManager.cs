@@ -16,9 +16,16 @@ namespace CbFractals.ViewModel.SceneManager
             this.MainWindow = aMainWindow;
             this.Parameters = new CParameters(this);
 
-            this.Parameters.Build();
-
-            this.UpdateCurrentValues();
+            this.UpdateCurrentValuesLockBegin();
+            try
+            {
+                this.Parameters.Build();
+            }
+            finally
+            {
+                this.UpdateCurrentValuesLockEnd();
+            }
+            //this.UpdateCurrentValues();
 
             this.RenderFrameOnChangeValueIsEnabled = true;
         }
@@ -35,11 +42,35 @@ namespace CbFractals.ViewModel.SceneManager
             this.OnChangeRenderFrameOnDemand();
         }
 
+        private uint UpdateCurrentValuesLockCount;
+        private bool UpdateCurrentValuesQueued;
+        internal void UpdateCurrentValuesLockBegin()
+        {
+            ++this.UpdateCurrentValuesLockCount;
+        }
+        internal void UpdateCurrentValuesLockEnd()
+        {
+            --this.UpdateCurrentValuesLockCount;
+            if(0 == this.UpdateCurrentValuesLockCount
+            && this.UpdateCurrentValuesQueued)
+            {
+                this.UpdateCurrentValues();
+            }
+        }
+
         private void UpdateCurrentValues()
         {
-            foreach (var aParameter in this.Parameters.Parameters)
+            if (this.UpdateCurrentValuesLockCount > 0)
             {
-                aParameter.UpdateCurrentValue();
+                this.UpdateCurrentValuesQueued = true;
+            }
+            else
+            {
+                foreach (var aParameter in this.Parameters.Parameters)
+                {
+                    aParameter.UpdateCurrentValue();
+                }
+                this.UpdateCurrentValuesQueued = false;
             }
         }
 

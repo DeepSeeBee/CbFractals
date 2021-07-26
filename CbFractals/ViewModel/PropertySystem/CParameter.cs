@@ -12,14 +12,10 @@ namespace CbFractals.ViewModel.PropertySystem
 {
     public abstract class CParameter : CValueNode
     {
-        internal CParameter(CParameters aParameters, CParameterEnum aParameterEnum) : base(aParameters.ParentProgressionManager, aParameterEnum.GetNameEnum())
+        internal CParameter(CValueNode aParentValueNode, CNameEnum aNameEnum) : base(aParentValueNode, aParentValueNode.ParentProgressionManager, aNameEnum)
         {
-            this.ParentParameters = aParameters;
-            this.ParameterEnum = aParameterEnum;
             this.MappedProgression = new CMappedProgression(this, Name_MappedProgression);
         }
-        internal readonly CParameters ParentParameters;
-        internal readonly CParameterEnum ParameterEnum;
         #region Constant
         private CConstant ConstantM;
         internal CConstant Constant => CLazyLoad.Get(ref this.ConstantM, () => this.NewConstant(this, Name_Constant));
@@ -33,7 +29,6 @@ namespace CbFractals.ViewModel.PropertySystem
         private CParameter MaxParameterNullable { get; set; }
         internal CValueNode Max => this.MaxParameterNullable is object ? (CValueNode)this.MaxParameterNullable : (CValueNode)this.MaxConstant;
         public CValueNode VmMax => this.Max;
-
         internal abstract CConstant NewConstant(CValueNode aParentValueNode, CNameEnum aName);
         #endregion        
         #region LinearProgression
@@ -114,7 +109,13 @@ namespace CbFractals.ViewModel.PropertySystem
                 aProgression.Build();
             }
         }
+
+        internal static CParameter New(CValueNode aParentValueNode, Type aParameterType, CNameEnum aNameEnum)
+            => CParameterClassRegistry.Singleton[aParameterType].New<CParameter>(aParentValueNode, aNameEnum);
+
         internal T As<T>() where T : CParameter => (T)this;
+
+        internal virtual void SetMapToRange(bool mtr) {}
 
         internal void SetConst<T>(T v, bool aSelect = false)
         {
@@ -167,7 +168,10 @@ namespace CbFractals.ViewModel.PropertySystem
         internal void SetMax(CParameterEnum p)
             => this.SetMax(this.ParentProgressionManager.Parameters[p]);
         #endregion
-        internal override CValueNodeGuiEnum ValueNodeGuiEnum => CValueNodeGuiEnum.ParameterCurrentValue;
+        #region Gui
+        internal override CValueNodeGuiEnum ValueNodeGuiEnum => CValueNodeGuiEnum.Parameter;
+
+        #endregion 
         internal override void SetEditable(bool v)
         {
             base.SetEditable(v);
@@ -182,8 +186,8 @@ namespace CbFractals.ViewModel.PropertySystem
 
     public abstract class CNumericParameter<T> : CParameter
     {
-        internal CNumericParameter(CParameters aParentParameters, CParameterEnum aParameterEnum)
-        : base(aParentParameters, aParameterEnum)
+        internal CNumericParameter(CValueNode aParentValueNode, CNameEnum aNameEnum)
+        : base(aParentValueNode, aNameEnum)
         {
         }
         internal new CConstant<T> Min => (CConstant<T>)base.Min;
@@ -192,8 +196,8 @@ namespace CbFractals.ViewModel.PropertySystem
 
     public abstract class CEnumParameter<T> : CParameter
     {
-        internal CEnumParameter(CParameters aParentParameters, CParameterEnum aParameterEnum)
-        : base(aParentParameters, aParameterEnum)
+        internal CEnumParameter(CParameters aParentParameters, CNameEnum aNameEnum)
+        : base(aParentParameters, aNameEnum)
         {
         }
         internal override void Build()
@@ -207,7 +211,7 @@ namespace CbFractals.ViewModel.PropertySystem
 
     public sealed class CInt64Parameter : CNumericParameter<Int64>
     {
-        public CInt64Parameter(CParameters aParentParameters, CParameterEnum aParameterEnum) : base(aParentParameters, aParameterEnum)
+        public CInt64Parameter(CParameters aParentParameters, CNameEnum aNameEnum) : base(aParentParameters, aNameEnum)
         {
         }
         internal override CConstant NewConstant(CValueNode aParentValueNode, CNameEnum aName) => new CInt64Constant(aParentValueNode, aName);
@@ -215,7 +219,7 @@ namespace CbFractals.ViewModel.PropertySystem
     }
     public sealed class CDoubleParameter : CNumericParameter<double>
     {
-        public CDoubleParameter(CParameters aParentParameters, CParameterEnum aParameterEnum) : base(aParentParameters, aParameterEnum)
+        public CDoubleParameter(CValueNode aParentValueNode, CNameEnum aNameEnum) : base(aParentValueNode, aNameEnum)
         {
 
         }
@@ -224,6 +228,7 @@ namespace CbFractals.ViewModel.PropertySystem
         internal override object GetTypelessValue() => this.MapToRange ? this.GetMappedValue() : base.GetTypelessValue();
 
         internal bool MapToRange = true;
+        internal override void SetMapToRange(bool mtr) => this.MapToRange = mtr;
         internal double GetMappedValue()
             => ((double)base.GetTypelessValue()).Map(0d, 1d, this.Min.Value, this.Max.GetDoubleValue());
         internal override object ConverTo(object aValue) => Convert.ToDouble(aValue);
@@ -239,14 +244,16 @@ namespace CbFractals.ViewModel.PropertySystem
         {
             var aFunc = this.FuncProgression.Funcs.Find(aFuncNameEnum);
             this.FuncProgression.Func = aFunc;
-            if(aSelect)
+            foreach(var i in Enumerable.Range(0, aParameters.Length))
+            {
+                var aParameter = aFunc.InputParameters.InputParameters[i].Parameter;
+                aParameter.ParameterRefProgression.ParameterRef.SetValueSource(aParameters[i]);
+                aParameter.Progression = aParameter.ParameterRefProgression;
+            }
+            if (aSelect)
             {
                 this.Progression = this.FuncProgression;
             }
-            foreach(var i in Enumerable.Range(0, aParameters.Length))
-            {
-                aFunc.InputParameters.InputParameters[i].ParameterRef.SetValueSource(aParameters[i]);
-            }            
         }
     }
 

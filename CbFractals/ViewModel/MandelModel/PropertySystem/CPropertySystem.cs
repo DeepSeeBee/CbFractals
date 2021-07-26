@@ -14,7 +14,7 @@ namespace CbFractals.ViewModel.MandelModel.PropertySystem
 
     internal sealed class CModelRenderModeEnumParameter : CEnumParameter<CModelRenderModeEnum>
     {
-        public CModelRenderModeEnumParameter(CParameters aParentParameters, CParameterEnum aParameterEnum) : base(aParentParameters, aParameterEnum)
+        public CModelRenderModeEnumParameter(CParameters aParentParameters, CNameEnum aNameEnum) : base(aParentParameters, aNameEnum)
         {
         }
         internal override CConstant NewConstant(CValueNode aParentValueNode, CNameEnum aName)
