@@ -589,7 +589,7 @@ namespace CbFractals.ViewModel.Mandelbrot
                 foreach (var aPixelCoord in aPixelCoords)
                 {
                     var aPixelIdx = aPixelCoord.Item2 * aDx + aPixelCoord.Item1;
-                    var aColorFkt = aPixelAlgorithm.RenderPixel(aPixelCoord.Item1, aPixelCoord.Item2);
+                    var aColorFkt = aPixelAlgorithm.GetPixelFkt(aPixelCoord.Item1, aPixelCoord.Item2);
                     aColorFktSink.Write(aColorFkt);
                 }
             });
@@ -646,32 +646,6 @@ namespace CbFractals.ViewModel.Mandelbrot
             var aRenderFrameOutput = aNewRenderFrameOutput();
             var aState = new CEndRenderFrameState(this, aRenderFrameOutput, CEndRenderFrameEnum.Default);
             aState.Enter();
-
-            //this.MainWindow.Image.Source = aRenderFrameOutput.Item1;
-            //var aMandelSpace = aRenderFrameOutput.Item2;
-            //var aMandelCenter = aRenderFrameOutput.Item3;
-            //var aRarestColor = CColorDetector.GetColor(aRenderFrameOutput.Item4);
-            //var aDominantColor = CColorDetector.GetColor(aRenderFrameOutput.Item5);
-
-
-            //throw new NotImplementedException();
-            ////var aPositionState = new CMandelbrotState(aRenderOutput, CMandelbrotState.CRenderFrameThreadDoneEnum.Default);
-            ////this.MandelbrotState = aPositionState;
-            ////var aCenterFktCoord = this.NewFktCoordFromMandelCoord(aMandelSpace, aMandelCenter); // aMandelCenter.Subtract(aMandelSpace.GetRectPos()).Divide(aMandelSpace.GetRectSize());
-            ////if(aDisableCenterAnimation)
-            ////{
-            ////this.CenterTargetFktCoord = aCenterFktCoord;
-            ////}
-            ////this.MandelCenterFktTest = aMandelCenterFkt;
-            //this.RarestColorBrush = new SolidColorBrush(aRarestColor);
-            //this.DominantColorBrush = new SolidColorBrush(aDominantColor); ;
-            //this.RenderFrameTaskNullable = null;
-            //this.RenderFrameIsPending = false;
-            //if (this.RenderMovieIsPending.Value)
-            //{
-            //    throw new NotImplementedException();
-            //    // this.RenderBatchFrameNext();                
-            //}            
         }
         #endregion     
         #region Center

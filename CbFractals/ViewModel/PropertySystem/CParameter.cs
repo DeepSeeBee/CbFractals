@@ -1,5 +1,8 @@
 ﻿using CbFractals.Tools;
+using CbFractals.ViewModel.MandelModel;
+using CbFractals.ViewModel.MandelModel.PropertySystem;
 using CbFractals.ViewModel.Render;
+using CbFractals.ViewModel.Render.PropertySystem;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -255,6 +258,7 @@ namespace CbFractals.ViewModel.PropertySystem
             this.Dic.Add(typeof(double), typeof(CDoubleParameter));
             this.Dic.Add(typeof(CPixelAlgorithmEnum), typeof(CPixelAlgorithmEnumParameter));
             this.Dic.Add(typeof(CColorAlgorithmEnum), typeof(CColorAlgorithmEnumParameter));
+            this.Dic.Add(typeof(CModelRenderModeEnum), typeof(CModelRenderModeEnumParameter));
         }
         internal static readonly CParameterClassRegistry Singleton = new CParameterClassRegistry();
         private readonly Dictionary<Type, Type> Dic = new Dictionary<Type, Type>();
@@ -263,3 +267,4 @@ namespace CbFractals.ViewModel.PropertySystem
     }
 
 }
+ 

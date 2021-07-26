@@ -72,7 +72,7 @@ namespace CbFractals.ViewModel.Mandelbrot
         }
 
 
-        internal override double RenderPixel(int aX, int aY)
+        internal override double GetPixelFkt(int aX, int aY)
         {
             var aPixelCoord = new CVec2Int(aX, aY);
             var aDx = this.SizePxl.Item1;
@@ -135,7 +135,7 @@ namespace CbFractals.ViewModel.Mandelbrot
 
         private readonly CVec2 JuliaDeltaPos;
 
-        internal override double RenderPixel(int aX, int aY)
+        internal override double GetPixelFkt(int aX, int aY)
         {
             var aPixelCoord = new CVec2Int(aX, aY);
             var aDx = this.SizePxl.Item1;
@@ -182,7 +182,7 @@ namespace CbFractals.ViewModel.Mandelbrot
         {
 
         }
-        internal override double RenderPixel(int aX, int aY)
+        internal override double GetPixelFkt(int aX, int aY)
         {
             //throw new NotImplementedException();
             /*

@@ -42,7 +42,7 @@ namespace CbFractals.ViewModel.Render
 
     internal abstract class CPixelAlgorithm<TResult>
     {
-        internal abstract TResult RenderPixel(int aX, int aY);
+        internal abstract TResult GetPixelFkt(int aX, int aY);
     }
 
 }

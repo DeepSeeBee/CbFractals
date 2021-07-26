@@ -1,4 +1,5 @@
 ﻿using CbFractals.Tools;
+using CbFractals.ViewModel.MandelModel;
 using CbFractals.ViewModel.Render;
 using CbFractals.ViewModel.SceneManager; // TODO-abstrahieren?
 using System;
@@ -138,6 +139,9 @@ namespace CbFractals.ViewModel.PropertySystem
 
         [CGuid("f055b084-182f-4806-b29c-9bcebc67a50c")]
         Parameter_ColorAlgorithm,
+
+        [CGuid("c3b67c3b-f7e7-460a-9f09-9986f0baaf36")]
+        Parameter_ModelRenderMode,
     }
 
     public sealed class CNameAttribute : Attribute
@@ -248,7 +252,11 @@ namespace CbFractals.ViewModel.PropertySystem
         [CType(typeof(CColorAlgorithmEnum))]
         ColorAlgorithm,
 
-        _Count
+        [CName(CNameEnum.Parameter_ModelRenderMode)]
+        [CType(typeof(CModelRenderModeEnum))]
+        ModelRenderMode,
+
+        _Count,
     }
     // Oscillator : Mit amplitudenmodulation und frequenzmodulation "2 schritte vor 1 zurück" realisieren.
     //  RingelOsci

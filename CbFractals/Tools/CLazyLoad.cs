@@ -20,6 +20,8 @@ namespace CbFractals.Tools
             }
             return v;
         }
+
+        internal static void LazyLoad(this object aObj) { }
     }
 
 }
