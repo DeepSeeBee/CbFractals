@@ -48,7 +48,7 @@
   <Class Name="CbFractals.ViewModel.PropertySystem.CConstant" Collapsed="true">
     <Position X="5" Y="5.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAABAIAAAAAAAAAAAQAAAAAIBAEAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAABAIAAAAAAAAAAAQAEAAAIBAEAAAAA=</HashCode>
       <FileName>ViewModel\PropertySystem\CConstant.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -141,21 +141,21 @@
   <Class Name="CbFractals.ViewModel.PropertySystem.CEnumParameter&lt;T&gt;" Collapsed="true">
     <Position X="24" Y="6" Width="2" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAEAAAAAA=</HashCode>
       <FileName>ViewModel\PropertySystem\CParameter.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="CbFractals.ViewModel.PropertySystem.CInt64Parameter" Collapsed="true">
     <Position X="28.5" Y="8.75" Width="1.75" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAA=</HashCode>
       <FileName>ViewModel\PropertySystem\CParameter.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="CbFractals.ViewModel.PropertySystem.CDoubleParameter" Collapsed="true">
     <Position X="26.5" Y="8.75" Width="1.75" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAA=</HashCode>
+      <HashCode>AAAAAAAIAAABAAAAAAAAAAAAABAAgAAAAAAAFAAEAgA=</HashCode>
       <FileName>ViewModel\PropertySystem\CParameter.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -179,7 +179,7 @@
   <Class Name="CbFractals.ViewModel.PropertySystem.CParameters" Collapsed="true">
     <Position X="20.5" Y="3.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AACQAAAAAIAAAABACIAoAIQCAAAQwgAAAIAAQAAMAAQ=</HashCode>
+      <HashCode>AACQAAAAAIAAAABACIAoAIQCAAAQwgAQAIAAQAAMAAQ=</HashCode>
       <FileName>ViewModel\PropertySystem\CParameters.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -291,7 +291,7 @@
       </Path>
     </InheritanceLine>
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAIAAAAQAAAAAAIAAAAAAgAAQAAAEAAAEAAA=</HashCode>
+      <HashCode>AAAAAAAAAIAAAAAAAAAAAIAAAAAAgAAQAAAEAAgEAAA=</HashCode>
       <FileName>ViewModel\PropertySystem\CProgression.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -306,7 +306,7 @@
       </Path>
     </InheritanceLine>
     <TypeIdentifier>
-      <HashCode>AAAAAABAAAAIAAQAAgAAAIAAAAAQgAAQAAAAAAAEAAA=</HashCode>
+      <HashCode>AAAAAABAAAAIAAAAAwAAAIAAAAAAgAAQAAAAAAgEAAA=</HashCode>
       <FileName>ViewModel\PropertySystem\CProgression.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -321,7 +321,7 @@
       </Path>
     </InheritanceLine>
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAIACAACQAAAAAAAAAQgAAAAEBACAAAAAA=</HashCode>
+      <HashCode>AQAAAAAAQAAIACAACQAAABAAAAAAgAAAAERACAAAAAA=</HashCode>
       <FileName>ViewModel\PropertySystem\CProgression.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -378,7 +378,7 @@
   <Enum Name="CbFractals.ViewModel.PropertySystem.CNameEnum" Collapsed="true">
     <Position X="17.5" Y="2" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>QIAAkAcAAJAkAoUFEgAEAQCCAERAAAhAAJUAwBAAGAY=</HashCode>
+      <HashCode>wIAAkAcAAJAkAoUFEgAMAQCCAERAAAhAAJUAwBAAGAY=</HashCode>
       <FileName>ViewModel\PropertySystem\CParameters.cs</FileName>
     </TypeIdentifier>
   </Enum>
@@ -392,7 +392,7 @@
   <Enum Name="CbFractals.ViewModel.PropertySystem.CValueNodeGuiEnum" Collapsed="true">
     <Position X="11.5" Y="8.5" Width="1.75" />
     <TypeIdentifier>
-      <HashCode>AAAAEAAAAIIAAAQQAgAAAAAAAAAAAAAAAAIBAAAAAAA=</HashCode>
+      <HashCode>AAAAEAAAAIIAAAAQAgAAAAAAAAAQAAAAAMIBAAAAAAA=</HashCode>
       <FileName>ViewModel\PropertySystem\CValueNode.cs</FileName>
     </TypeIdentifier>
   </Enum>

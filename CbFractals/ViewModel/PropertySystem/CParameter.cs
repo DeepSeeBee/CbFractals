@@ -117,40 +117,6 @@ namespace CbFractals.ViewModel.PropertySystem
 
         internal virtual void SetMapToRange(bool mtr) {}
 
-        internal void SetConst<T>(T v, bool aSelect = false)
-        {
-            this.Constant.As<CConstant<T>>().Value = v;
-            if(aSelect)
-            {
-                this.Progression = this.Constant;
-            }
-        }
-        internal void SetConst<T>(T aValue, T aMin, T aMax)
-        {
-            this.SetConst(aValue);
-            this.Min.As<CConstant<T>>().Value = aMin;
-            this.MaxConstant.As<CConstant<T>>().Value = aMax;
-        }
-
-        internal void SetParameterRef(CParameter aParameter, bool aSelect = false)
-        {
-            this.ParameterRefProgression.ParameterRef.Parameter = aParameter;
-            if(aSelect)
-            {
-                this.Progression = this.ParameterRefProgression;
-            }
-        }
-
-        internal void SetParameterRef(CParameterEnum e, bool aSelect = false)
-            => this.SetParameterRef(this.ParentProgressionManager.Parameters[e], aSelect);
-
-        internal void SetMappedProgression(double aMappedMin, double aMappedMax)
-        {
-            var aMappedProgression = this.MappedProgression;
-            aMappedProgression.MappedMin.Value = aMappedMin;
-            aMappedProgression.MappedMax.Value = aMappedMax;
-        }
-
         //internal void SetProgression(double aFrom, double aTo)
         //{
         //    this.As<CParameter<double>>().Min.Value = aFrom;
@@ -182,6 +148,7 @@ namespace CbFractals.ViewModel.PropertySystem
         {
             this.Progression = this.Constant;
         }
+
     }
 
     public abstract class CNumericParameter<T> : CParameter
@@ -246,7 +213,7 @@ namespace CbFractals.ViewModel.PropertySystem
             this.FuncProgression.Func = aFunc;
             foreach(var i in Enumerable.Range(0, aParameters.Length))
             {
-                var aParameter = aFunc.InputParameters.InputParameters[i].Parameter;
+                var aParameter = aFunc.FuncParameters.FuncParameters[i].Parameter;
                 aParameter.ParameterRefProgression.ParameterRef.SetValueSource(aParameters[i]);
                 aParameter.Progression = aParameter.ParameterRefProgression;
             }

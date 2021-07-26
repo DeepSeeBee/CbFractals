@@ -146,16 +146,16 @@ namespace CbFractals.ViewModel.PropertySystem
     {
         internal CFuncParameters(CValueNode aParentValueNode, CNameEnum aName, params CParameterDeclaration[] aParameterDeclarations) : base(aParentValueNode, aParentValueNode.ParentProgressionManager, aName)
         {
-            this.InputParameters = aParameterDeclarations.Select(d => new CFuncParameter(this, d)).ToArray();
+            this.FuncParameters = aParameterDeclarations.Select(d => new CFuncParameter(this, d)).ToArray();
         }
         internal object[] GetParamArray()
-            => this.InputParameters.Select(p => p.GetTypelessValue()).ToArray();
+            => this.FuncParameters.Select(p => p.GetTypelessValue()).ToArray();
         internal override object GetTypelessValue()
             => this.GetParamArray();
 
-        internal readonly CFuncParameter[] InputParameters;
-        internal override IEnumerable<CValueNode> SubValueNodes => this.InputParameters;
-        internal override IEnumerable<CValueNode> ValueSources => this.InputParameters;
+        internal readonly CFuncParameter[] FuncParameters;
+        internal override IEnumerable<CValueNode> SubValueNodes => this.FuncParameters;
+        internal override IEnumerable<CValueNode> ValueSources => this.FuncParameters;
         internal override CValueNodeGuiEnum ValueNodeGuiEnum => CValueNodeGuiEnum.ValueSources;
         internal override void Build()
         {
@@ -173,13 +173,13 @@ namespace CbFractals.ViewModel.PropertySystem
         #region InputParameters
         internal abstract Tuple<CNameEnum, Type>[] ParameterDeclarations { get; }
         private CFuncParameters InputParametersM;
-        internal CFuncParameters InputParameters => CLazyLoad.Get(ref this.InputParametersM, () => new CFuncParameters(this, CNameEnum.InputParameters, this.ParameterDeclarations));
-        public CFuncParameters VmInputParameters => this.InputParameters;
-        internal override IEnumerable<CValueNode> SubValueNodes => base.SubValueNodes.Concat(new CValueNode[] { this.InputParameters });
+        internal CFuncParameters FuncParameters => CLazyLoad.Get(ref this.InputParametersM, () => new CFuncParameters(this, CNameEnum.InputParameters, this.ParameterDeclarations));
+        public CFuncParameters VmInputParameters => this.FuncParameters;
+        internal override IEnumerable<CValueNode> SubValueNodes => base.SubValueNodes.Concat(new CValueNode[] { this.FuncParameters });
         #endregion
         #region Invoke
         internal override object GetTypelessValue()
-            => this.Invoke(this.InputParameters.GetParamArray());
+            => this.Invoke(this.FuncParameters.GetParamArray());
 
         internal abstract object Invoke(object[] aParams);
         #endregion
@@ -195,15 +195,38 @@ namespace CbFractals.ViewModel.PropertySystem
     internal sealed class CNativeFunc : CFunc
     {
         #region ctor
+
         private CNativeFunc(CValueNode aParentValueNode, 
                              CNameEnum aName,
                              CFuncImplementation aFuncImpl,
-                             CParameterDeclaration[] aParameterDeclarations
+                             CParameterDeclaration[] aParameterDeclarations,
+                             CBuildNativeFuncAction aBuildFunc
                              ): base(aParentValueNode, aName)
         {
             this.ParameterDeclarationsM = aParameterDeclarations;
             this.FuncImplementation = aFuncImpl;
+            this.BuildFunc = aBuildFunc;
         }
+
+        internal override void Build()
+        {
+            base.Build();
+
+            this.BuildFunc(this);
+        }
+
+        private static void BuildNull(CNativeFunc aFunc)
+        {
+
+        }
+        private static void BuildOscillator(CNativeFunc aOscillatorFunc)
+        {
+            aOscillatorFunc.FuncParameters.SubValueNodes.Find<CFuncParameter>(CNameEnum.Func_Oscillator_In_Frequency)
+                .Parameter.SetConst<double>(1d);
+            aOscillatorFunc.FuncParameters.SubValueNodes.Find<CFuncParameter>(CNameEnum.Func_Oscillator_In_Time)
+                .Parameter.SetParameterRef(CParameterEnum.BeatIndex, true);
+        }
+
         internal static CNativeFunc[] New(CValueNode aParentValueNode)
         {
             var aFuncs = new CNativeFunc[]
@@ -211,16 +234,33 @@ namespace CbFractals.ViewModel.PropertySystem
                 new CNativeFunc(aParentValueNode, 
                                 CNameEnum.Func_SecondsToBeatCount, 
                                 new CFuncImplementation(SecondsToBeatCount),
-                                new CParameterDeclaration[]{ new CParameterDeclaration(CNameEnum.Func_SecondsToBeatCount_In_Seconds, typeof(double)) }
+                                new CParameterDeclaration[]{ new CParameterDeclaration(CNameEnum.Func_SecondsToBeatCount_In_Seconds, typeof(double)) },
+                                new CBuildNativeFuncAction(BuildNull)
                                 ),
                 new CNativeFunc(aParentValueNode,
                                 CNameEnum.Func_SecondsToFrameCount,
                                 new CFuncImplementation(SecondsToFrameCount),
-                                new CParameterDeclaration[]{ new CParameterDeclaration(CNameEnum.Func_SecondsToFrameCount_In_Seconds, typeof(double)) }
+                                new CParameterDeclaration[]{ new CParameterDeclaration(CNameEnum.Func_SecondsToFrameCount_In_Seconds, typeof(double)) },
+                                new CBuildNativeFuncAction(BuildNull)
+                                ),
+                new CNativeFunc(aParentValueNode,
+                                CNameEnum.Func_Oscillator,
+                                new CFuncImplementation(Oscillator),
+                                new CParameterDeclaration[]
+                                {
+                                    new CParameterDeclaration(CNameEnum.Func_Oscillator_In_Time, typeof(double)),
+                                    new CParameterDeclaration(CNameEnum.Func_Oscillator_In_Frequency, typeof(double)),
+                                },
+                                new CBuildNativeFuncAction(BuildOscillator)
                                 ),
             };
             return aFuncs;
         }
+        #endregion
+        #region BuildFunc
+        private delegate void CBuildNativeFuncAction(CNativeFunc aNativeFunc);
+
+        private readonly CBuildNativeFuncAction BuildFunc;
         #endregion
         #region InputParameters
         private readonly CParameterDeclaration[] ParameterDeclarationsM;
@@ -256,6 +296,20 @@ namespace CbFractals.ViewModel.PropertySystem
             var aFramePosition = aTimePosition.ToFramePosition(aFps);
             var aFramePos = aFramePosition.FramePos;
             return aFramePos;
+        }
+
+        private static object Oscillator(CNativeFunc aFunc, object[] aParams)
+        {
+            var aTime = aFunc.GetDoubleParam(aParams, 0, CNameEnum.Func_Oscillator_In_Time);
+            var aFrq = aFunc.GetDoubleParam(aParams, 1, CNameEnum.Func_Oscillator_In_Frequency);
+            var aIn = (Math.PI * 2d * aTime / aFrq) - (Math.PI / 2d);
+            var aAmplitude = Math.Sin(aIn).Map(-1d, 1d, 0d, 1d);
+            return aAmplitude;
+        }
+
+        private object GetDoubleParam(object[] aParams, int v, object func_Oscillator_Time)
+        {
+            throw new NotImplementedException();
         }
         #endregion
     }

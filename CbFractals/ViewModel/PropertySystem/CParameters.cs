@@ -142,6 +142,33 @@ namespace CbFractals.ViewModel.PropertySystem
 
         [CGuid("c3b67c3b-f7e7-460a-9f09-9986f0baaf36")]
         Parameter_ModelRenderMode,
+
+        [CGuid("e4316ad0-799c-4521-9a83-d7e17d6bb49a")]
+        Func_Oscillator,
+
+        [CGuid("21925707-606e-41d5-82ea-cc3aa5c044a6")]
+        Func_Oscillator_In_Time,
+
+        [CGuid("ebeaa178-1d39-4913-a00d-33ad3a247b21")]
+        Func_Oscillator_In_Frequency,
+
+    //    [CGuid("1d9e38d6-bd55-41f7-af3c-0a65c9d2d0b7")]
+    //    [CGuid("46605a73-339e-4ab5-b21d-aa34f08dae6c")]
+    //    [CGuid("60273768-2032-4db0-9df1-ee04bf79bf51")]
+    //    [CGuid("18bf40eb-5ee7-414a-ad5a-8592d3ae867b")]
+    //    [CGuid("98c8fd0a-3a69-4610-be41-07df729b37a2")]
+    //    [CGuid("50134ca5-b3ad-428b-8a31-a8d8a8f96d07")]
+    //    [CGuid("945d8350-0660-4317-9331-cdf6bf875ed2")]
+    //    [CGuid("8ffcce50-35df-48a4-9381-bd84fb939197")]
+    //    [CGuid("5f3bcc88-444d-48d0-a55a-9c5941876033")]
+    //    [CGuid("2bc1a5d2-6295-4040-b5c8-e61cec32f326")]
+    //    [CGuid("3e3313a6-84e0-4ac7-88a9-57e43510934d")]
+    //    [CGuid("817aa388-96bb-4a19-a389-d9371d5c6421")]
+    //    [CGuid("a49392ca-9c3e-4fd0-a92d-a61f2825e1f3")]
+    //    [CGuid("d36ce832-6988-43e1-a41a-10019cfcd9db")]
+    //    [CGuid("566d5527-5097-4a2f-853d-a8a373c90873")]
+    //    [CGuid("67e2f588-af55-43d4-87e2-6c3667626d5b")]
+    //    [CGuid("1d09f3d6-4769-4ee5-b13b-1c7da0567e11")]
     }
 
     public sealed class CNameAttribute : Attribute
@@ -354,8 +381,24 @@ namespace CbFractals.ViewModel.PropertySystem
             this[CParameterEnum.FramesPerSecond].SetEditable(false);
             this[CParameterEnum.FramesPerSecond].As<CDoubleParameter>().MapToRange = false;
 
-            
-
+            var aForMovie20210726 = true;
+            if (aForMovie20210726)
+            {
+                var aSelect = true;
+                this[CParameterEnum.DarkenThresholdLo].SetConst<double>(0, 0.05d, 0.3d);
+                this[CParameterEnum.DarkenThresholdLo].SetFunc(CNameEnum.Func_Oscillator);
+                this[CParameterEnum.DarkenThresholdLo].SetFunc(CNameEnum.Func_Oscillator, aSelect);
+                this[CParameterEnum.DarkenThresholdLo].GetParam(CNameEnum.Func_Oscillator, CNameEnum.Func_Oscillator_In_Frequency).SetConst<double>(1, aSelect);
+                this[CParameterEnum.JuliaPartImaginary].SetConst<double>(0d, 0.247d, 0.25d);
+                this[CParameterEnum.JuliaPartImaginary].SetFunc(CNameEnum.Func_Oscillator, aSelect);
+                this[CParameterEnum.JuliaPartImaginary].GetParam(CNameEnum.Func_Oscillator, CNameEnum.Func_Oscillator_In_Frequency).SetConst<double>(32, true);
+                this[CParameterEnum.JuliaPartReal].SetConst<double>(0d, -1.02d, -0.99d, aSelect);
+                this[CParameterEnum.JuliaPartReal].SetFunc(CNameEnum.Func_Oscillator, aSelect);
+                this[CParameterEnum.JuliaPartReal].GetParam(CNameEnum.Func_Oscillator, CNameEnum.Func_Oscillator_In_Frequency).SetConst<double>(33, true);
+                this[CParameterEnum.Zoom].SetConst<double>(0d, 1d, 0.75d, aSelect);
+                this[CParameterEnum.Zoom].SetFunc(CNameEnum.Func_Oscillator, aSelect);
+                this[CParameterEnum.Zoom].GetParam(CNameEnum.Func_Oscillator, CNameEnum.Func_Oscillator_In_Frequency).SetConst<double>(4, aSelect);
+            }
             //var aJuliaConstReal = this[CParameterEnum.JuliaConstRealPart];
             //aJuliaConstReal.SetConst<double>(-0.7d);
             //aJuliaConstReal.SetConst<double>(-0.68);

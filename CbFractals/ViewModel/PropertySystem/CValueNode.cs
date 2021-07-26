@@ -139,7 +139,7 @@ namespace CbFractals.ViewModel.PropertySystem
         }
         internal bool Selectable = true;
         public bool VmSelectable => this.Selectable;
-        public override string ToString() => this.NameEnum.ToString();
+        public override string ToString() => string.Join('.', this.Path.Select(vn => vn.VmName)); // this.NameEnum.ToString();
         internal void SetValueSource(CParameterEnum p)
             => this.ValueSource = this.ParentProgressionManager.Parameters[p];
     }

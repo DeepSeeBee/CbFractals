@@ -131,7 +131,7 @@
                                                     <GridViewColumn Header="Max">
                                                         <GridViewColumn.CellTemplate>
                                                             <DataTemplate>
-                                                                <psysgui:CValueNodeGui MinWidth="50" DataContext="{Binding VmMax}"/>
+                                                                <psysgui:CValueNodeGui MinWidth="50" DataContext="{Binding VmMax.VmCurrentValue}"/>
                                                             </DataTemplate>
                                                         </GridViewColumn.CellTemplate>
                                                     </GridViewColumn>

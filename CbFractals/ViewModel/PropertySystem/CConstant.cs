@@ -25,6 +25,8 @@ namespace CbFractals.ViewModel.PropertySystem
         internal virtual void SetDefaultMax() { }
 
         internal abstract void SetTypelessValue(object v);
+        public CConstant VmCurrentValue => this;
+
 
     }
 
